@@ -102,3 +102,26 @@ const quizObject = {
 };
 
 console.log("Quiz Object:", quizObject);
+
+// created a function that makes the three categories into buttons that can be clicked on to start the quiz for that category.
+const makeElements = () => {
+    const container = document.createElement('div');
+    //this will be the #id that we use to style the container
+    container.id = 'category-buttons-container';
+    document.body.appendChild(container);
+    
+    quizObject.categoryArray.forEach(category => {
+        const button = document.createElement('button');
+        button.textContent = category.categoryName;
+        //this will be the .class that we use to style the buttons
+        button.classList.add('category-button');
+        button.addEventListener('click', () => {
+            console.log('Category selected:', category.categoryName);
+        });
+
+        container.appendChild(button); // Appends each button to the container
+    });
+};
+
+// Call the function to create and append elements
+makeElements();
