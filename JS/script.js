@@ -1,4 +1,4 @@
-import quizObject from './quizData.js';
+import quizObject from './JS/quizData.js';
 
 // I tried to make it as modular as possible so its easy to add/remove things as possible to the functionality so maybe it takes up a bit more code than necessary atm
 // maybe some of the functions can be combined into one but I think its easier to read this way currently, so if you have any suggestions on how to make it more efficient please let me know!
