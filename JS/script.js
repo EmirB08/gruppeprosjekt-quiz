@@ -1,127 +1,144 @@
-//created an object to hold the quiz questions and answers for all three categories, just used some generated questions as placeholders!! replace with your own questions and answers for each category and add more (Im thinking 15 per category!) you have been assigned but follow the same format as the example below
+import quizObject from './quizData.js';
 
-const quizObject = {
-    categoryArray: [
-        {
-            categoryName: "HTML",
-            questionArray: [
-                {
-                    questionText: "What does HTML stand for?",
-                    answers: [
-                        { answerText: "Hyper Trainer Marking Language", isCorrect: false },
-                        { answerText: "Hyper Text Markup Language", isCorrect: true },
-                        { answerText: "Hyperlinks and Text Markup Language", isCorrect: false },
-                        { answerText: "Home Tool Markup Language", isCorrect: false }
-                    ]
-                },
-                {
-                    questionText: "Which HTML element represents the root of an HTML document?",
-                    answers: [
-                        { answerText: "<root>", isCorrect: false },
-                        { answerText: "<base>", isCorrect: false },
-                        { answerText: "<html>", isCorrect: true },
-                        { answerText: "<head>", isCorrect: false }
-                    ]
-                },
-                {
-                    questionText: "Which element is used to specify a footer for a document or section?",
-                    answers: [
-                        { answerText: "<bottom>", isCorrect: false },
-                        { answerText: "<footer>", isCorrect: true },
-                        { answerText: "<section>", isCorrect: false },
-                        { answerText: "<div>", isCorrect: false }
-                    ]
-                }
-            ]
-        },
-        {
-            categoryName: "CSS",
-            questionArray: [
-                {
-                    questionText: "What does CSS stand for?",
-                    answers: [
-                        { answerText: "Colorful Style Sheets", isCorrect: false },
-                        { answerText: "Creative Style Sheets", isCorrect: false },
-                        { answerText: "Computer Style Sheets", isCorrect: false },
-                        { answerText: "Cascading Style Sheets", isCorrect: true }
-                    ]
-                },
-                {
-                    questionText: "Which property is used to change the font of an element?",
-                    answers: [
-                        { answerText: "font-type", isCorrect: false },
-                        { answerText: "font-family", isCorrect: true },
-                        { answerText: "font-weight", isCorrect: false },
-                        { answerText: "text-style", isCorrect: false }
-                    ]
-                },
-                {
-                    questionText: "How do you select an element with the id 'demo'?",
-                    answers: [
-                        { answerText: ".demo", isCorrect: false },
-                        { answerText: "#demo", isCorrect: true },
-                        { answerText: "*demo", isCorrect: false },
-                        { answerText: "demo", isCorrect: false }
-                    ]
-                }
-            ]
-        },
-        {
-            categoryName: "JavaScript",
-            questionArray: [
-                {
-                    questionText: "Which symbol is used for comments in JavaScript?",
-                    answers: [
-                        { answerText: "//", isCorrect: true },
-                        { answerText: "/* */", isCorrect: false },
-                        { answerText: "<!-- -->", isCorrect: false },
-                        { answerText: "#", isCorrect: false }
-                    ]
-                },
-                {
-                    questionText: "Which method is used to write messages in the console?",
-                    answers: [
-                        { answerText: "console.write()", isCorrect: false },
-                        { answerText: "console.log()", isCorrect: true },
-                        { answerText: "console.output()", isCorrect: false },
-                        { answerText: "console.print()", isCorrect: false }
-                    ]
-                },
-                {
-                    questionText: "Which of the following is a JavaScript data type?",
-                    answers: [
-                        { answerText: "Number", isCorrect: true },
-                        { answerText: "Element", isCorrect: false },
-                        { answerText: "Tag", isCorrect: false },
-                        { answerText: "Link", isCorrect: false }
-                    ]
-                }
-            ]
-        }
-    ]
+// I tried to make it as modular as possible so its easy to add/remove things as possible to the functionality so maybe it takes up a bit more code than necessary atm
+// maybe some of the functions can be combined into one but I think its easier to read this way currently, so if you have any suggestions on how to make it more efficient please let me know!
+
+// Global state variables for the current quiz category, question index, and user's score.
+let currentQuizCategory, currentQuizQuestionIndex = 0, userQuizScore = 0;
+
+// Function to create a new container element with a specified ID.
+const createContainer = (containerId) => {
+    const container = document.createElement("div");
+    container.id = containerId;
+    return container;
 };
 
-console.log("Quiz Object:", quizObject);
+// Function to create a new button element with specified text and an event handler.
+const createQuizButton = (buttonText, eventHandler) => {
+    const button = document.createElement("button");
+    button.textContent = buttonText;
+    button.addEventListener("click", eventHandler);
+    return button;
+};
 
-// created a function that makes the three categories into buttons that can be clicked on to start the quiz for that category.
-const makeElements = () => {
-    const container = document.createElement('div');
-    //this will be the #id that we use to style the container
-    container.id = 'category-buttons-container';
-    document.body.appendChild(container);
-    
-    quizObject.categoryArray.forEach(category => {
-        const button = document.createElement('button');
-        button.textContent = category.categoryName;
-        //this will be the .class that we use to style the buttons
-        button.classList.add('category-button');
-        button.addEventListener('click', () => {
-            console.log('Category selected:', category.categoryName);
-        });
+// Function to create a new element with specified tag name and text content.
+const createElementWithText = (tagName, textContent) => {
+    const element = document.createElement(tagName);
+    element.textContent = textContent;
+    return element;
+};
 
-        container.appendChild(button); // Appends each button to the container
+// Function to clear all child elements from a given container.
+const clearContainerChildren = (container) => {
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
+};
+
+// Containers for quiz categories and questions.
+const quizCategoryContainer = document.getElementById("quiz-category-container") || createContainer("quiz-category-container");
+const quizQuestionContainer = document.getElementById("quiz-question-container") || createContainer("quiz-question-container");
+
+// Function to set up the main containers for the quiz categories and questions.
+const setupQuizContainers = () => {
+    quizCategoryContainer.id = "quiz-category-container";
+    quizQuestionContainer.id = "quiz-question-container";
+    document.body.appendChild(quizCategoryContainer);
+    document.body.appendChild(quizQuestionContainer);
+};
+
+// Function to initialize and display quiz categories.
+const initializeQuizCategories = () => {
+    clearContainerChildren(quizCategoryContainer);
+    quizCategoryContainer.appendChild(createElementWithText("h1", "Choose Your Quiz"));
+
+    // Create and append buttons for each quiz category.
+    quizObject.categoryArray.forEach(quizCategory => {
+        quizCategoryContainer.appendChild(createQuizButton(quizCategory.categoryName, () => selectQuizCategory(quizCategory.categoryName)));
     });
 };
 
-// Call the function to create and append elements
-makeElements();
+// Function to handle selection of a quiz category.
+const selectQuizCategory = (selectedCategoryName) => {
+    const selectedCategory = quizObject.categoryArray.find(categoryItem => categoryItem.categoryName === selectedCategoryName);
+    if (!selectedCategory) {
+        console.error("Category not found:", selectedCategoryName);
+        return;
+    }
+
+    currentQuizCategory = selectedCategory;
+    currentQuizQuestionIndex = 0;
+    userQuizScore = 0;
+    quizCategoryContainer.style.display = "none"; // Hide category container
+    quizQuestionContainer.appendChild(createQuizButton("Return", resetQuiz)); // Append a return button
+    displayQuizQuestion(); // Display the first question of the selected category
+};
+
+// Function to display the current quiz question and answer options.
+const displayQuizQuestion = () => {
+    clearContainerChildren(quizQuestionContainer);
+
+    const categoryTitle = createElementWithText("h2", currentQuizCategory.categoryName);
+    quizQuestionContainer.appendChild(categoryTitle);
+
+    const currentQuestion = currentQuizCategory.questionArray[currentQuizQuestionIndex];
+    quizQuestionContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
+
+    // Create and append buttons for each answer option.
+    currentQuestion.answers.forEach(answer => {
+        const answerButton = createQuizButton(answer.answerText, () => handleAnswerSelection(answerButton, answer.isCorrect));
+        answerButton.classList.add("answer-button");
+        quizQuestionContainer.appendChild(answerButton);
+    });
+
+    // Append 'Previous' and 'Next' or 'Finish Quiz' buttons based on the current question index.
+    if (currentQuizQuestionIndex > 0) {
+        quizQuestionContainer.appendChild(createQuizButton("Previous", previousQuizQuestion));
+    }
+    if (currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1) {
+        quizQuestionContainer.appendChild(createQuizButton("Next", nextQuizQuestion));
+    } else {
+        quizQuestionContainer.appendChild(createQuizButton("Finish Quiz", showQuizEndPage));
+    }
+};
+
+// Function to handle the selection of an answer.
+const handleAnswerSelection = (selectedButton, isCorrect) => {
+    const answerButtons = quizQuestionContainer.querySelectorAll(".answer-button");
+    answerButtons.forEach(button => button.classList.remove("selected-answer"));
+    selectedButton.classList.add("selected-answer");
+    if (isCorrect) userQuizScore++;
+};
+
+// Functions to navigate to the previous and next quiz questions.
+const previousQuizQuestion = () => {
+    currentQuizQuestionIndex--;
+    displayQuizQuestion();
+};
+
+const nextQuizQuestion = () => {
+    currentQuizQuestionIndex++;
+    displayQuizQuestion();
+};
+
+// Function to display the end page of the quiz showing the user's score.
+const showQuizEndPage = () => {
+    clearContainerChildren(quizQuestionContainer);
+    quizQuestionContainer.appendChild(createElementWithText("h2", "Quiz Completed!"));
+    quizQuestionContainer.appendChild(createElementWithText("p", `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`));
+    quizQuestionContainer.appendChild(createQuizButton("Restart Quiz", resetQuiz));
+};
+
+// Function to reset the quiz and return to the category selection.
+const resetQuiz = () => {
+    currentQuizCategory = null;
+    currentQuizQuestionIndex = 0;
+    userQuizScore = 0;
+    quizCategoryContainer.style.display = "";
+    clearContainerChildren(quizQuestionContainer);
+    initializeQuizCategories();
+};
+
+// Initialize the quiz containers and display categories.
+setupQuizContainers();
+initializeQuizCategories();
