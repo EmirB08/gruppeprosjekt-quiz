@@ -70,9 +70,10 @@ const selectQuizCategory = (selectedCategoryName) => {
     currentQuizQuestionIndex = 0;
     userQuizScore = 0;
     quizCategoryContainer.style.display = "none"; // Hide category container
-    quizQuestionContainer.appendChild(createQuizButton("Return", resetQuiz)); // Append a return button
+
     displayQuizQuestion(); // Display the first question of the selected category
 };
+
 
 // Function to display the current quiz question and answer options.
 const displayQuizQuestion = () => {
