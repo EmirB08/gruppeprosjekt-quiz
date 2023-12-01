@@ -6,14 +6,14 @@ import quizObject from './quizData.js';
 // Global state variables for the current quiz category, question index, and user's score.
 let currentQuizCategory, currentQuizQuestionIndex = 0, userQuizScore = 0;
 
-// Function to create a new container element with a specified ID.
+// Function to create a new container element with a specified ID. - can be used to create additional  elements with a specified ID
 const createContainer = (containerId) => {
     const container = document.createElement("div");
     container.id = containerId;
     return container;
 };
 
-// Function to create a new button element with specified text and an event handler.
+// Function to create a new button element with specified text and an event handler. - can be used to create additional elements with specified text and event handler
 const createQuizButton = (buttonText, eventHandler) => {
     const button = document.createElement("button");
     button.textContent = buttonText;
@@ -21,7 +21,7 @@ const createQuizButton = (buttonText, eventHandler) => {
     return button;
 };
 
-// Function to create a new element with specified tag name and text content.
+// Function to create a new element with specified tag name and text content. - can be used to create additional elements with specified tag name and text content
 const createElementWithText = (tagName, textContent) => {
     const element = document.createElement(tagName);
     element.textContent = textContent;
