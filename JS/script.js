@@ -122,13 +122,7 @@ const displayQuizQuestion = () => {
    if (currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1) {
         quizQuestionContainer.appendChild(createQuizButton("Next", nextQuizQuestion));
 
-        // Automatically go to the next question after 10 seconds(ilakia)
-        setTimeout(() => {
-            // Check if the quiz is not finished to avoid going to the next question after the last one
-            if (currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1) {
-                nextQuizQuestion();
-            }
-        }, 10000); // 10000 milliseconds = 10 seconds
+       
    } else {
         quizQuestionContainer.appendChild(createQuizButton("Finish Quiz", showQuizEndPage));
         finishQuizButton.id = "review-button"; // Set the ID for the review button
