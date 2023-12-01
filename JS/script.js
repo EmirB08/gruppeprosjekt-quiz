@@ -6,6 +6,8 @@ import quizObject from './quizData.js';
 // Global state variables for the current quiz category, question index, and user's score.
 let currentQuizCategory, currentQuizQuestionIndex = 0, userQuizScore = 0;
 
+//these are just some utility functions to make it easier to create elements and append them to the DOM, you can use these if you want!
+
 // Function to create a new container element with a specified ID. - can be used to create additional  elements with a specified ID
 const createContainer = (containerId) => {
     const container = document.createElement("div");
