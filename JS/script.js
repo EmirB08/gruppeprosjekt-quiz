@@ -233,6 +233,12 @@ const homeButton = createHomeButton(resetQuiz);
 document.body.appendChild(homeButton);
 
 
+
+// Set the style for the home button
+homeButton.style.position = "absolute";
+homeButton.style.top = "10px"; 
+homeButton.style.right = "10px"; 
+
 // Function to review the selected answers (added)
 const reviewAnswers = () => {
     clearContainerChildren(quizQuestionContainer);
