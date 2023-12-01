@@ -142,14 +142,14 @@ const handleAnswerSelection = (selectedButton, isCorrect) => {
     enableReviewButton();
 };
 
-
+/* 
 // Function to enable the review button.(ilakia)
 const enableReviewButton = () => {
     const reviewButton = document.getElementById("review-button");
     if (reviewButton) {
         reviewButton.disabled = false;
     }
-};
+}; */
 
 // Functions to navigate to the previous and next quiz questions.
 const previousQuizQuestion = () => {
@@ -232,8 +232,8 @@ document.body.appendChild(homeButton);
 homeButton.style.position = "absolute";
 homeButton.style.top = "10px"; 
 homeButton.style.right = "10px"; 
-
-// Function to review the selected answers (added)
+/* 
+// Function to review the selected answers (ilakia)
 const reviewAnswers = () => {
     clearContainerChildren(quizQuestionContainer);
 
@@ -261,7 +261,7 @@ const finishQuizButton = createQuizButton("Review Answers", reviewAnswers);
 finishQuizButton.id = "review-button"; // Set the ID for the review button
 finishQuizButton.disabled = true; // Disable the review button initially
 
-
+ */
 
 
 
