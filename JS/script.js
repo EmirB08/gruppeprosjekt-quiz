@@ -75,7 +75,7 @@ const selectQuizCategory = (selectedCategoryName) => {
         return;
     }
  // Record the start time when the quiz category is selected
-  const quizStartTime = new Date();
+  quizStartTime = new Date();
 
 
     currentQuizCategory = selectedCategory;
