@@ -5,20 +5,15 @@ import quizObject from './quizData.js';
 
 // Global state variables for the current quiz category, question index, and user's score.
 let currentQuizCategory, currentQuizQuestionIndex = 0, userQuizScore = 0;
+let quizStartTime; // Variable to store the start time of the quiz
 
 //these are just some utility functions to make it easier to create elements and append them to the DOM, you can use these if you want!
-
 // Function to create a new container element with a specified ID. - can be used to create additional  elements with a specified ID
 const createContainer = (containerId) => {
     const container = document.createElement("div");
     container.id = containerId;
     return container;
 };
-
-
-
-
-
 // Function to create a new button element with specified text and an event handler. - can be used to create additional elements with specified text and event handler
 const createQuizButton = (buttonText, eventHandler) => {
     const button = document.createElement("button");
@@ -27,21 +22,18 @@ const createQuizButton = (buttonText, eventHandler) => {
     button.classList.add("quiz-button"); 
     return button;
 };
-
 // Function to create a new element with specified tag name and text content. - can be used to create additional elements with specified tag name and text content
 const createElementWithText = (tagName, textContent) => {
     const element = document.createElement(tagName);
     element.textContent = textContent;
     return element;
 };
-
 // Function to clear all child elements from a given container.
 const clearContainerChildren = (container) => {
     while (container.firstChild) {
         container.removeChild(container.firstChild);
     }
 };
-
 // Containers for quiz categories and questions.
 const quizCategoryContainer = document.getElementById("quiz-category-container") || createContainer("quiz-category-container");
 const quizQuestionContainer = document.getElementById("quiz-question-container") || createContainer("quiz-question-container");
@@ -54,7 +46,6 @@ const setupQuizContainers = () => {
     document.body.appendChild(quizQuestionContainer);
     
 };
-
 // Function to initialize and display quiz categories.
 const initializeQuizCategories = () => {
     clearContainerChildren(quizCategoryContainer);
@@ -65,8 +56,6 @@ const initializeQuizCategories = () => {
         quizCategoryContainer.appendChild(createQuizButton(quizCategory.categoryName, () => selectQuizCategory(quizCategory.categoryName)));
     });
 };
-let quizStartTime; // Variable to store the start time of the quiz
-
 // Function to handle selection of a quiz category.
 const selectQuizCategory = (selectedCategoryName) => {
     const selectedCategory = quizObject.categoryArray.find(categoryItem => categoryItem.categoryName === selectedCategoryName);
@@ -75,9 +64,7 @@ const selectQuizCategory = (selectedCategoryName) => {
         return;
     }
  // Record the start time when the quiz category is selected
-  quizStartTime = new Date();
-
-
+    quizStartTime = new Date();
     currentQuizCategory = selectedCategory;
     currentQuizQuestionIndex = 0;
     userQuizScore = 0;
@@ -92,8 +79,6 @@ const displayQuizProgress = () => {
     const progressElement = createElementWithText("p", progressText);
     quizQuestionContainer.appendChild(progressElement);
 };
-
-
 
 // Function to display the current quiz question and answer options.
 const displayQuizQuestion = () => {
@@ -125,9 +110,7 @@ const displayQuizQuestion = () => {
        
    } else {
         quizQuestionContainer.appendChild(createQuizButton("Finish Quiz", showQuizEndPage));
-        finishQuizButton.id = "review-button"; // Set the ID for the review button
-        finishQuizButton.disabled = true; // Disable the review button initially
-        quizQuestionContainer.appendChild(finishQuizButton);
+        //removed some redundant code here, there was a call to some function that didn't exist
    }
 };
 
@@ -137,19 +120,8 @@ const handleAnswerSelection = (selectedButton, isCorrect) => {
     answerButtons.forEach(button => button.classList.remove("selected-answer"));
     selectedButton.classList.add("selected-answer");
     if (isCorrect) userQuizScore++;
-    
-    // Enable the review button after an answer is selected(ilakia)
-    enableReviewButton();
+    //removed some redundant code here, there was a call to a button we removed
 };
-
-/* 
-// Function to enable the review button.(ilakia)
-const enableReviewButton = () => {
-    const reviewButton = document.getElementById("review-button");
-    if (reviewButton) {
-        reviewButton.disabled = false;
-    }
-}; */
 
 // Functions to navigate to the previous and next quiz questions.
 const previousQuizQuestion = () => {
@@ -161,7 +133,6 @@ const nextQuizQuestion = () => {
     currentQuizQuestionIndex++;
     displayQuizQuestion();
 };
-
 
 const showQuizEndPage = () => {
     clearContainerChildren(quizQuestionContainer);
@@ -176,26 +147,6 @@ const showQuizEndPage = () => {
     quizQuestionContainer.appendChild(createElementWithText("p", `Time taken: ${timeTaken} seconds`));
 
 };
-
-
-// Function to finish the quiz and return to the category selection or home.
-const finishQuiz = (autoFinish) => {
-    // Clear the container
-    clearContainerChildren(quizQuestionContainer);
-
-    if (autoFinish) {
-        // Automatically finish the quiz after displaying the results
-        setTimeout(() => {
-            resetQuiz();
-        }, 10000); //
-    } else {
-        // Keep the results displayed until the user clicks home
-        quizCategoryContainer.style.display = "";
-        initializeQuizCategories();
-    }
-};
-
-
 // Function to reset the quiz and return to the category selection.
 const resetQuiz = () => {
     currentQuizCategory = null;
@@ -205,8 +156,6 @@ const resetQuiz = () => {
     clearContainerChildren(quizQuestionContainer);
     initializeQuizCategories();
 };
-
-
 // Function to create a home button with an event handler.(ilakia)
 const createHomeButton = (eventHandler) => {
     const homeButton = document.createElement("button");
@@ -214,54 +163,19 @@ const createHomeButton = (eventHandler) => {
     homeButton.addEventListener("click", eventHandler);
     return homeButton;
 };
-
-
+// Create and append the home button.(ilakia)
+const homeButton = createHomeButton(resetQuiz); 
+document.body.appendChild(homeButton);
 
 // Initialize the quiz containers and display categories.
 setupQuizContainers();
 initializeQuizCategories();
 
-
-// Create and append the home button.(ilakia)
-const homeButton = createHomeButton(resetQuiz); 
-document.body.appendChild(homeButton);
-
-
-
 // Set the style for the home button
 homeButton.style.position = "absolute";
 homeButton.style.top = "10px"; 
 homeButton.style.right = "10px"; 
-/* 
-// Function to review the selected answers (ilakia)
-const reviewAnswers = () => {
-    clearContainerChildren(quizQuestionContainer);
 
-    // Display each question with user's selected answer and correct answer
-    currentQuizCategory.questionArray.forEach((question, index) => {
-        const questionContainer = createContainer(`question-${index}`);
-        questionContainer.appendChild(createElementWithText("h3", question.questionText));
-
-        // Display user's selected answer
-        const userAnswer = createElementWithText("p", `Your Answer: ${question.answers.find(answer => answer.isSelected)?.answerText || "Not answered"}`);
-        questionContainer.appendChild(userAnswer);
-
-        // Display correct answer
-        const correctAnswer = createElementWithText("p", `Correct Answer: ${question.answers.find(answer => answer.isCorrect)?.answerText}`);
-        questionContainer.appendChild(correctAnswer);
-
-        quizQuestionContainer.appendChild(questionContainer);
-    });
-
-    // Create and append 'Finish Quiz' button
-    quizQuestionContainer.appendChild(createQuizButton("Finish Quiz", () => finishQuiz(true)));
-};
-// Create the review button (added)
-const finishQuizButton = createQuizButton("Review Answers", reviewAnswers);
-finishQuizButton.id = "review-button"; // Set the ID for the review button
-finishQuizButton.disabled = true; // Disable the review button initially
-
- */
 
 
 
