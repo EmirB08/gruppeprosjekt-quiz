@@ -179,6 +179,35 @@ const showQuizEndPage = () => {
   quizQuestionContainer.appendChild(
     createQuizButton("Restart Quiz", resetQuiz)
   );
+
+  const currentQuestion =
+    currentQuizCategory.questionArray[currentQuizQuestionIndex];
+  const userChosenAnswer = currentQuestion.answers[userSelectedAnswer];
+  quizQuestionContainer.appendChild(createElementWithText("h2", "Question:"));
+  quizQuestionContainer.appendChild(
+    createElementWithText("p", currentQuestion.questionText)
+  );
+
+  quizQuestionContainer.appendChild(
+    createElementWithText("h2", "Your Chosen Answer:")
+  );
+  quizQuestionContainer.appendChild(
+    createElementWithText("p", userChosenAnswer.answerText)
+  );
+
+  quizQuestionContainer.appendChild(
+    createElementWithText("h2", "Correct Answer:")
+  );
+  quizQuestionContainer.appendChild(
+    createElementWithText("p", correctAnswer.answerText)
+  );
+
+  quizQuestionContainer.appendChild(
+    createElementWithText(
+      "p",
+      `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`
+    )
+  );
 };
 
 // Function to reset the quiz and return to the category selection.
@@ -190,18 +219,5 @@ const resetQuiz = () => {
   clearContainerChildren(quizQuestionContainer);
   initializeQuizCategories();
 };
-// Answer summary
-// const summary = document.createElement("section");
-// summary.classList.add("summaryArray");
-// const createParagraf = document.createElement("p");
-// const quizSummary = () => {
-//   for (let i = 0; i < questionArray.length; i++) {
-//     console.log("questionArray");
-//         createContainer.innerHTML = `
-//     createParagraf = ${questionArray[i].questionText};
-//     `;
-//   }
-// };
-// Initialize the quiz containers and display categories.
 setupQuizContainers();
 initializeQuizCategories();
