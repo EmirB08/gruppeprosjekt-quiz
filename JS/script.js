@@ -106,6 +106,7 @@ const displayQuizQuestion = () => {
 
     // Append the category title
     const categoryTitle = createElementWithText("h2", currentQuizCategory.categoryName);
+    categoryTitle.classList.add("category-title");
     questionInfoContainer.appendChild(categoryTitle);
 
     // Display and append quiz progress
