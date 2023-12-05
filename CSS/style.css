@@ -1,4 +1,4 @@
-/* Existing styles */
+/* A LOT of experimentation, it is just temporary! having some issues with alignment so im working on it */
 * {
     margin: 0;
     padding: 0;
@@ -29,9 +29,9 @@ body {
 .category-button-container {
     grid-area: buttons;
     display: flex;
-    flex-direction: row; /* Align buttons in a row */
+    flex-direction: row; 
     justify-content: center;
-    gap: 10px; /* Space between buttons */
+    gap: 10px; 
 }
 
 .category-button {
@@ -75,20 +75,61 @@ body {
 
 .quiz-content {
     grid-area: content;
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    gap: 10px;
 }
 
 .answer-button {
     display: block;
-    width: 100%;
+    width: 400px;
+    height: 50px;
     margin: 10px 0;
     background-color: #4285f4;
     color: #ffffff;
     border: 1.5px solid black;
     border-radius: 5px;
     cursor: pointer;
-    
+    text-align: center;
+    padding: 10px;
 }
+
+
 
 h1 {
     display: block;
 }
+
+#quiz-question-container {
+    height: 800px;
+    width: 800px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.quiz-content {
+    display: grid;
+    grid-template-rows: 1fr 2fr;
+    gap: 10px;
+}
+
+
+.answer-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.question-info {
+    
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.quiz-content {
+    min-height: 500px;
+    overflow: auto; 
+}
+

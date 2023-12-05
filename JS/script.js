@@ -62,6 +62,7 @@ const initializeQuizCategories = () => {
     });
 
     quizCategoryContainer.appendChild(buttonContainer);
+    quizQuestionContainer.style.display = "none"; 
 };
 
 
@@ -77,8 +78,8 @@ const selectQuizCategory = (selectedCategoryName) => {
     currentQuizCategory = selectedCategory;
     currentQuizQuestionIndex = 0;
     userQuizScore = 0;
-    quizCategoryContainer.style.display = "none"; // Hide category container
-
+    quizCategoryContainer.style.display = "none";
+    quizQuestionContainer.style.display = "grid"; // Hide category container
     displayQuizQuestion(); // Display the first question of the selected category
 };
 
@@ -93,30 +94,39 @@ const displayQuizProgress = () => {
 const displayQuizQuestion = () => {
     clearContainerChildren(quizQuestionContainer);
 
-    // Create a container for the question content and append it to quizQuestionContainer
+    // Main container for the content
     const contentContainer = document.createElement("div");
-    //had to make some new classes to make it easier to style the quiz content
-    contentContainer.classList.add("quiz-content"); // Assign class for grid area "content"
+    contentContainer.classList.add("quiz-content");
     quizQuestionContainer.appendChild(contentContainer);
+
+    // Container for the question, title, and progress
+    const questionInfoContainer = document.createElement("div");
+    questionInfoContainer.classList.add("question-info");
+    contentContainer.appendChild(questionInfoContainer);
 
     // Append the category title
     const categoryTitle = createElementWithText("h2", currentQuizCategory.categoryName);
-    contentContainer.appendChild(categoryTitle);
+    questionInfoContainer.appendChild(categoryTitle);
 
     // Display and append quiz progress
     const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
     const progressElement = createElementWithText("p", progressText);
-    contentContainer.appendChild(progressElement);
+    questionInfoContainer.appendChild(progressElement);
 
     // Append the current question
     const currentQuestion = currentQuizCategory.questionArray[currentQuizQuestionIndex];
-    contentContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
+    questionInfoContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
+
+    // Container for the answer buttons
+    const answerButtonsContainer = document.createElement("div");
+    answerButtonsContainer.classList.add("answer-buttons");
+    contentContainer.appendChild(answerButtonsContainer);
 
     // Create and append buttons for each answer option
     currentQuestion.answers.forEach(answer => {
         const answerButton = createQuizButton(answer.answerText, () => handleAnswerSelection(answerButton, answer.isCorrect));
         answerButton.classList.add("answer-button");
-        contentContainer.appendChild(answerButton);
+        answerButtonsContainer.appendChild(answerButton);
     });
 
     // Append 'Previous' button if applicable
@@ -194,11 +204,7 @@ document.body.appendChild(homeButton);
 setupQuizContainers();
 initializeQuizCategories();
 
-// Set the style for the home button
-homeButton.style.position = "absolute";
-homeButton.style.top = "10px"; 
-homeButton.style.right = "10px"; 
-
+//removed some css styling here, css not related to js functionality shoudl be kept in the css file
 
 
 
