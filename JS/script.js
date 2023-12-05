@@ -7,16 +7,15 @@ import quizObject from "./quizData.js";
 let currentQuizCategory,
   currentQuizQuestionIndex = 0,
   userQuizScore = 0;
+let quizStartTime; // Variable to store the start time of the quiz
 
 //these are just some utility functions to make it easier to create elements and append them to the DOM, you can use these if you want!
-
 // Function to create a new container element with a specified ID. - can be used to create additional  elements with a specified ID
 const createContainer = (containerId) => {
   const container = document.createElement("div");
   container.id = containerId;
   return container;
 };
-
 // Function to create a new button element with specified text and an event handler. - can be used to create additional elements with specified text and event handler
 const createQuizButton = (buttonText, eventHandler) => {
   const button = document.createElement("button");
@@ -25,21 +24,18 @@ const createQuizButton = (buttonText, eventHandler) => {
   button.classList.add("quiz-button");
   return button;
 };
-
 // Function to create a new element with specified tag name and text content. - can be used to create additional elements with specified tag name and text content
 const createElementWithText = (tagName, textContent) => {
   const element = document.createElement(tagName);
   element.textContent = textContent;
   return element;
 };
-
 // Function to clear all child elements from a given container.
 const clearContainerChildren = (container) => {
   while (container.firstChild) {
     container.removeChild(container.firstChild);
   }
 };
-
 // Containers for quiz categories and questions.
 const quizCategoryContainer =
   document.getElementById("quiz-category-container") ||
@@ -55,7 +51,6 @@ const setupQuizContainers = () => {
   document.body.appendChild(quizCategoryContainer);
   document.body.appendChild(quizQuestionContainer);
 };
-
 // Function to initialize and display quiz categories.
 const initializeQuizCategories = () => {
   clearContainerChildren(quizCategoryContainer);
@@ -63,14 +58,20 @@ const initializeQuizCategories = () => {
     createElementWithText("h1", "Choose Your Quiz")
   );
 
-  // Create and append buttons for each quiz category.
+  const buttonContainer = document.createElement("div");
+  buttonContainer.classList.add("category-button-container");
+
   quizObject.categoryArray.forEach((quizCategory) => {
-    quizCategoryContainer.appendChild(
-      createQuizButton(quizCategory.categoryName, () =>
-        selectQuizCategory(quizCategory.categoryName)
-      )
+    const categoryButton = createQuizButton(quizCategory.categoryName, () =>
+      selectQuizCategory(quizCategory.categoryName)
     );
+    //had to add some new classes to make it easier to style the buttons
+    categoryButton.classList.add("category-button");
+    buttonContainer.appendChild(categoryButton);
   });
+
+  quizCategoryContainer.appendChild(buttonContainer);
+  quizQuestionContainer.style.display = "none";
 };
 let quizStartTime; // Variable to store the start time of the quiz
 
@@ -89,8 +90,8 @@ const selectQuizCategory = (selectedCategoryName) => {
   currentQuizCategory = selectedCategory;
   currentQuizQuestionIndex = 0;
   userQuizScore = 0;
-  quizCategoryContainer.style.display = "none"; // Hide category container
-
+  quizCategoryContainer.style.display = "none";
+  quizQuestionContainer.style.display = "grid"; // Hide category container
   displayQuizQuestion(); // Display the first question of the selected category
 };
 
@@ -107,60 +108,80 @@ const displayQuizProgress = () => {
 const displayQuizQuestion = () => {
   clearContainerChildren(quizQuestionContainer);
 
+  // Main container for the content
+  const contentContainer = document.createElement("div");
+  contentContainer.classList.add("quiz-content");
+  quizQuestionContainer.appendChild(contentContainer);
+
+  // Container for the question, title, and progress
+  const questionInfoContainer = document.createElement("div");
+  questionInfoContainer.classList.add("question-info");
+  contentContainer.appendChild(questionInfoContainer);
+
+  // Append the category title
   const categoryTitle = createElementWithText(
     "h2",
     currentQuizCategory.categoryName
   );
-  quizQuestionContainer.appendChild(categoryTitle);
+  questionInfoContainer.appendChild(categoryTitle);
 
-  // Display quiz progress
-  displayQuizProgress();
+  // Display and append quiz progress
+  const progressText = `Question ${currentQuizQuestionIndex + 1} of ${
+    currentQuizCategory.questionArray.length
+  }`;
+  const progressElement = createElementWithText("p", progressText);
+  questionInfoContainer.appendChild(progressElement);
 
+  // Append the current question
   const currentQuestion =
     currentQuizCategory.questionArray[currentQuizQuestionIndex];
-  quizQuestionContainer.appendChild(
+  questionInfoContainer.appendChild(
     createElementWithText("h2", currentQuestion.questionText)
   );
 
-  // Create and append buttons for each answer option.
+  // Container for the answer buttons
+  const answerButtonsContainer = document.createElement("div");
+  answerButtonsContainer.classList.add("answer-buttons");
+  contentContainer.appendChild(answerButtonsContainer);
+
+  // Create and append buttons for each answer option
   currentQuestion.answers.forEach((answer) => {
     const answerButton = createQuizButton(answer.answerText, () =>
       handleAnswerSelection(answerButton, answer.isCorrect)
     );
     answerButton.classList.add("answer-button");
-    quizQuestionContainer.appendChild(answerButton);
+    answerButtonsContainer.appendChild(answerButton);
   });
 
-  // Append 'Previous' and 'Next' or 'Finish Quiz' buttons based on the current question index.
+  // Append 'Previous' button if applicable
   if (currentQuizQuestionIndex > 0) {
-    quizQuestionContainer.appendChild(
-      createQuizButton("Previous", previousQuizQuestion)
-    );
+    const prevButton = createQuizButton("Previous", previousQuizQuestion);
+    prevButton.classList.add("nav-button", "prev-button"); // Assign class for grid area "prev"
+    quizQuestionContainer.appendChild(prevButton);
   }
-  if (currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1) {
-    quizQuestionContainer.appendChild(
-      createQuizButton("Next", nextQuizQuestion)
-    );
-  } else {
-    quizQuestionContainer.appendChild(
-      createQuizButton("Finish Quiz", showQuizEndPage)
-    );
-    finishQuizButton.id = "review-button"; // Set the ID for the review button
-    finishQuizButton.disabled = true; // Disable the review button initially
-    quizQuestionContainer.appendChild(finishQuizButton);
-  }
+
+  // Append 'Next' or 'Finish Quiz' button
+  //had to make some new classes to make it easier to style the quiz content
+  const nextOrFinishButton =
+    currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1
+      ? createQuizButton("Next", nextQuizQuestion)
+      : createQuizButton("Finish Quiz", showQuizEndPage);
+  nextOrFinishButton.classList.add(
+    "nav-button",
+    currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1
+      ? "next-button"
+      : "finish-button"
+  ); // Assign class for grid area "next"
+  quizQuestionContainer.appendChild(nextOrFinishButton);
 };
 
 // Function to handle the selection of an answer.
 const handleAnswerSelection = (selectedButton, isCorrect) => {
-  const answerButtons =
-    quizQuestionContainer.querySelectorAll(".answer-button");
+  const answerButtons = quizQuestionContainer.querySelectorAll("answer-button");
   answerButtons.forEach((button) => button.classList.remove("selected-answer"));
   selectedButton.classList.add("selected-answer");
   if (isCorrect) userQuizScore++;
-
-  // Enable the review button after an answer is selected(ilakia)
-  enableReviewButton();
+  //removed some redundant code here, there was a call to a button we removed
 };
 
 // Functions to navigate to the previous and next quiz questions.
@@ -245,6 +266,15 @@ const finishQuiz = (autoFinish) => {
   }
 };
 
+// Calculate the time taken(ilakia)
+const quizEndTime = new Date();
+const timeTaken = (quizEndTime - quizStartTime) / 1000; // Convert milliseconds to seconds
+
+// Display the time taken
+quizQuestionContainer.appendChild(
+  createElementWithText("p", `Time taken: ${timeTaken} seconds`)
+);
+
 // Function to reset the quiz and return to the category selection.
 const resetQuiz = () => {
   currentQuizCategory = null;
@@ -253,25 +283,31 @@ const resetQuiz = () => {
   quizCategoryContainer.style.display = "";
   clearContainerChildren(quizQuestionContainer);
   initializeQuizCategories();
+  localStorage.removeItem("selectedCategory");
 };
-
 // Function to create a home button with an event handler.(ilakia)
+//had to make some new classes to make it easier to style the quiz content
 const createHomeButton = (eventHandler) => {
   const homeButton = document.createElement("button");
   homeButton.textContent = "Home";
   homeButton.addEventListener("click", eventHandler);
+  homeButton.classList.add("home-button");
   return homeButton;
 };
-
-// Initialize the quiz containers and display categories.
-setupQuizContainers();
-initializeQuizCategories();
-
 // Create and append the home button.(ilakia)
 const homeButton = createHomeButton(resetQuiz);
 document.body.appendChild(homeButton);
 
-// Set the style for the home button
-homeButton.style.position = "absolute";
-homeButton.style.top = "10px";
-homeButton.style.right = "10px";
+// Initialize the quiz containers and display categories.
+setupQuizContainers();
+
+// Check if there is a previously selected category in local storage
+const storedCategory = localStorage.getItem("selectedCategory");
+if (storedCategory) {
+  currentQuizCategory = JSON.parse(storedCategory);
+  displayQuizQuestion();
+} else {
+  initializeQuizCategories();
+}
+
+//removed some css styling here, css not related to js functionality shoudl be kept in the css file
