@@ -22,6 +22,7 @@ const createQuizButton = (buttonText, eventHandler) => {
   const button = document.createElement("button");
   button.textContent = buttonText;
   button.addEventListener("click", eventHandler);
+  button.classList.add("quiz-button");
   return button;
 };
 
@@ -47,10 +48,6 @@ const quizQuestionContainer =
   document.getElementById("quiz-question-container") ||
   createContainer("quiz-question-container");
 
-/* -----------------------
-!!!! Quiz categories !!!! 
-------------------------*/
-
 // Function to set up the main containers for the quiz categories and questions.
 const setupQuizContainers = () => {
   quizCategoryContainer.id = "quiz-category-container";
@@ -75,6 +72,7 @@ const initializeQuizCategories = () => {
     );
   });
 };
+let quizStartTime; // Variable to store the start time of the quiz
 
 // Function to handle selection of a quiz category.
 const selectQuizCategory = (selectedCategoryName) => {
@@ -85,6 +83,8 @@ const selectQuizCategory = (selectedCategoryName) => {
     console.error("Category not found:", selectedCategoryName);
     return;
   }
+  // Record the start time when the quiz category is selected
+  quizStartTime = new Date();
 
   currentQuizCategory = selectedCategory;
   currentQuizQuestionIndex = 0;
@@ -94,9 +94,14 @@ const selectQuizCategory = (selectedCategoryName) => {
   displayQuizQuestion(); // Display the first question of the selected category
 };
 
-/* -----------------------------------------
-!!!! Quiz Question and answer options !!!! 
--------------------------------------------*/
+// Function to display the quiz progress (current question number and total number of questions).(ilakia)
+const displayQuizProgress = () => {
+  const progressText = `Question ${currentQuizQuestionIndex + 1} of ${
+    currentQuizCategory.questionArray.length
+  }`;
+  const progressElement = createElementWithText("p", progressText);
+  quizQuestionContainer.appendChild(progressElement);
+};
 
 // Function to display the current quiz question and answer options.
 const displayQuizQuestion = () => {
@@ -107,6 +112,9 @@ const displayQuizQuestion = () => {
     currentQuizCategory.categoryName
   );
   quizQuestionContainer.appendChild(categoryTitle);
+
+  // Display quiz progress
+  displayQuizProgress();
 
   const currentQuestion =
     currentQuizCategory.questionArray[currentQuizQuestionIndex];
@@ -137,6 +145,9 @@ const displayQuizQuestion = () => {
     quizQuestionContainer.appendChild(
       createQuizButton("Finish Quiz", showQuizEndPage)
     );
+    finishQuizButton.id = "review-button"; // Set the ID for the review button
+    finishQuizButton.disabled = true; // Disable the review button initially
+    quizQuestionContainer.appendChild(finishQuizButton);
   }
 };
 
@@ -147,6 +158,9 @@ const handleAnswerSelection = (selectedButton, isCorrect) => {
   answerButtons.forEach((button) => button.classList.remove("selected-answer"));
   selectedButton.classList.add("selected-answer");
   if (isCorrect) userQuizScore++;
+
+  // Enable the review button after an answer is selected(ilakia)
+  enableReviewButton();
 };
 
 // Functions to navigate to the previous and next quiz questions.
@@ -160,11 +174,10 @@ const nextQuizQuestion = () => {
   displayQuizQuestion();
 };
 
-/* ----------------
-!!!! End page !!!! 
------------------*/
+/* ---------------
+!!! End page !!!
+---------------- */
 
-// Function to display the end page of the quiz showing the user's score.
 const showQuizEndPage = () => {
   clearContainerChildren(quizQuestionContainer);
   quizQuestionContainer.appendChild(
@@ -176,10 +189,15 @@ const showQuizEndPage = () => {
       `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`
     )
   );
-  quizQuestionContainer.appendChild(
-    createQuizButton("Restart Quiz", resetQuiz)
-  );
 
+  // Calculate the time taken(ilakia)
+  const quizEndTime = new Date();
+  const timeTaken = (quizEndTime - quizStartTime) / 1000; // Convert milliseconds to seconds
+
+  // Display the time taken
+  quizQuestionContainer.appendChild(
+    createElementWithText("p", `Time taken: ${timeTaken} seconds`)
+  );
   const currentQuestion =
     currentQuizCategory.questionArray[currentQuizQuestionIndex];
   const userChosenAnswer = currentQuestion.answers[userSelectedAnswer];
@@ -210,6 +228,23 @@ const showQuizEndPage = () => {
   );
 };
 
+// Function to finish the quiz and return to the category selection or home.
+const finishQuiz = (autoFinish) => {
+  // Clear the container
+  clearContainerChildren(quizQuestionContainer);
+
+  if (autoFinish) {
+    // Automatically finish the quiz after displaying the results
+    setTimeout(() => {
+      resetQuiz();
+    }, 10000); //
+  } else {
+    // Keep the results displayed until the user clicks home
+    quizCategoryContainer.style.display = "";
+    initializeQuizCategories();
+  }
+};
+
 // Function to reset the quiz and return to the category selection.
 const resetQuiz = () => {
   currentQuizCategory = null;
@@ -219,5 +254,24 @@ const resetQuiz = () => {
   clearContainerChildren(quizQuestionContainer);
   initializeQuizCategories();
 };
+
+// Function to create a home button with an event handler.(ilakia)
+const createHomeButton = (eventHandler) => {
+  const homeButton = document.createElement("button");
+  homeButton.textContent = "Home";
+  homeButton.addEventListener("click", eventHandler);
+  return homeButton;
+};
+
+// Initialize the quiz containers and display categories.
 setupQuizContainers();
 initializeQuizCategories();
+
+// Create and append the home button.(ilakia)
+const homeButton = createHomeButton(resetQuiz);
+document.body.appendChild(homeButton);
+
+// Set the style for the home button
+homeButton.style.position = "absolute";
+homeButton.style.top = "10px";
+homeButton.style.right = "10px";
