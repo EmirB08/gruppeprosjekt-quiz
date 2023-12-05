@@ -72,7 +72,7 @@ const selectQuizCategory = (selectedCategoryName) => {
     if (!selectedCategory) {
         console.error("Category not found:", selectedCategoryName);
         return;
-        localStorage.setItem("selectedCategory", JSON.stringify(selectedCategory));
+       
     }
  // Record the start time when the quiz category is selected
   quizStartTime = new Date();
@@ -206,54 +206,21 @@ document.body.appendChild(homeButton);
 
 // Initialize the quiz containers and display categories.
 setupQuizContainers();
-initializeQuizCategories();
 
-<<<<<<< Updated upstream
+// Check if there is a previously selected category in local storage
+const storedCategory = localStorage.getItem("selectedCategory");
+if (storedCategory) {
+    currentQuizCategory = JSON.parse(storedCategory);
+    displayQuizQuestion();
+} else {
+    initializeQuizCategories();
+}
+
+
+
+
 //removed some css styling here, css not related to js functionality shoudl be kept in the css file
 
 
 
 
-=======
-
-// Create and append the home button.(ilakia)
-const homeButton = createHomeButton(resetQuiz); 
-document.body.appendChild(homeButton);
-
-
-
-// Set the style for the home button
-homeButton.style.position = "absolute";
-homeButton.style.top = "10px"; 
-homeButton.style.right = "10px"; 
-/* 
-// Function to review the selected answers (ilakia)
-const reviewAnswers = () => {
-    clearContainerChildren(quizQuestionContainer);
-
-    // Display each question with user's selected answer and correct answer
-    currentQuizCategory.questionArray.forEach((question, index) => {
-        const questionContainer = createContainer(`question-${index}`);
-        questionContainer.appendChild(createElementWithText("h3", question.questionText));
-
-        // Display user's selected answer
-        const userAnswer = createElementWithText("p", `Your Answer: ${question.answers.find(answer => answer.isSelected)?.answerText || "Not answered"}`);
-        questionContainer.appendChild(userAnswer);
-
-        // Display correct answer
-        const correctAnswer = createElementWithText("p", `Correct Answer: ${question.answers.find(answer => answer.isCorrect)?.answerText}`);
-        questionContainer.appendChild(correctAnswer);
-
-        quizQuestionContainer.appendChild(questionContainer);
-    });
-
-    // Create and append 'Finish Quiz' button
-    quizQuestionContainer.appendChild(createQuizButton("Finish Quiz", () => finishQuiz(true)));
-};
-// Create the review button (added)
-const finishQuizButton = createQuizButton("Review Answers", reviewAnswers);
-finishQuizButton.id = "review-button"; // Set the ID for the review button
-finishQuizButton.disabled = true; // Disable the review button initially
-
- */
->>>>>>> Stashed changes
