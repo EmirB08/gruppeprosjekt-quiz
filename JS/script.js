@@ -73,7 +73,7 @@ const initializeQuizCategories = () => {
   quizCategoryContainer.appendChild(buttonContainer);
   quizQuestionContainer.style.display = "none";
 };
-let quizStartTime; // Variable to store the start time of the quiz
+// let quizStartTime; // Variable to store the start time of the quiz
 
 // Function to handle selection of a quiz category.
 const selectQuizCategory = (selectedCategoryName) => {
