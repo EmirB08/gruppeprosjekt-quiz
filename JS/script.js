@@ -72,9 +72,12 @@ const selectQuizCategory = (selectedCategoryName) => {
     if (!selectedCategory) {
         console.error("Category not found:", selectedCategoryName);
         return;
+       
     }
  // Record the start time when the quiz category is selected
-    quizStartTime = new Date();
+  quizStartTime = new Date();
+
+
     currentQuizCategory = selectedCategory;
     currentQuizQuestionIndex = 0;
     userQuizScore = 0;
@@ -186,6 +189,7 @@ const resetQuiz = () => {
     quizCategoryContainer.style.display = "";
     clearContainerChildren(quizQuestionContainer);
     initializeQuizCategories();
+    localStorage.removeItem("selectedCategory");
 };
 // Function to create a home button with an event handler.(ilakia)
 //had to make some new classes to make it easier to style the quiz content
@@ -202,7 +206,18 @@ document.body.appendChild(homeButton);
 
 // Initialize the quiz containers and display categories.
 setupQuizContainers();
-initializeQuizCategories();
+
+// Check if there is a previously selected category in local storage
+const storedCategory = localStorage.getItem("selectedCategory");
+if (storedCategory) {
+    currentQuizCategory = JSON.parse(storedCategory);
+    displayQuizQuestion();
+} else {
+    initializeQuizCategories();
+}
+
+
+
 
 //removed some css styling here, css not related to js functionality shoudl be kept in the css file
 
