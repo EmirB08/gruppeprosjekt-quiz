@@ -73,9 +73,12 @@ const selectQuizCategory = (selectedCategoryName) => {
     if (!selectedCategory) {
         console.error("Category not found:", selectedCategoryName);
         return;
+       
     }
  // Record the start time when the quiz category is selected
   quizStartTime = new Date();
+ // Store the selected category in local storage
+ localStorage.setItem("selectedCategory", JSON.stringify(selectedCategory));
 
 
     currentQuizCategory = selectedCategory;
@@ -204,6 +207,7 @@ const resetQuiz = () => {
     quizCategoryContainer.style.display = "";
     clearContainerChildren(quizQuestionContainer);
     initializeQuizCategories();
+    localStorage.removeItem("selectedCategory");
 };
 
 
@@ -219,7 +223,18 @@ const createHomeButton = (eventHandler) => {
 
 // Initialize the quiz containers and display categories.
 setupQuizContainers();
-initializeQuizCategories();
+
+// Check if there is a previously selected category in local storage
+const storedCategory = localStorage.getItem("selectedCategory");
+if (storedCategory) {
+    currentQuizCategory = JSON.parse(storedCategory);
+    displayQuizQuestion();
+} else {
+    initializeQuizCategories();
+}
+
+
+
 
 
 // Create and append the home button.(ilakia)
