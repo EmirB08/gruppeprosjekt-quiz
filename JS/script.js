@@ -219,34 +219,6 @@ const showQuizEndPage = () => {
   quizQuestionContainer.appendChild(
     createElementWithText("p", `Time taken: ${timeTaken} seconds`)
   );
-  const currentQuestion =
-    currentQuizCategory.questionArray[currentQuizQuestionIndex];
-  const userChosenAnswer = currentQuestion.answers[userSelectedAnswer];
-  quizQuestionContainer.appendChild(createElementWithText("h2", "Question:"));
-  quizQuestionContainer.appendChild(
-    createElementWithText("p", currentQuestion.questionText)
-  );
-
-  quizQuestionContainer.appendChild(
-    createElementWithText("h2", "Your Chosen Answer:")
-  );
-  quizQuestionContainer.appendChild(
-    createElementWithText("p", userChosenAnswer.answerText)
-  );
-
-  quizQuestionContainer.appendChild(
-    createElementWithText("h2", "Correct Answer:")
-  );
-  quizQuestionContainer.appendChild(
-    createElementWithText("p", correctAnswer.answerText)
-  );
-
-  quizQuestionContainer.appendChild(
-    createElementWithText(
-      "p",
-      `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`
-    )
-  );
 };
 
 // Function to finish the quiz and return to the category selection or home.
@@ -309,5 +281,40 @@ if (storedCategory) {
 } else {
   initializeQuizCategories();
 }
+// Woring (André)
+const createSumeryButton = (eventHandler) => {
+  const sumeryButton = document.createElement("button");
+  sumeryButton.textContent = "Your Sumery";
+  sumeryButton.addEventListener("click", eventHandler);
+  sumeryButton.classList.add("sumery-btn");
+  return sumeryButton;
+};
 
+//  Not finished.
+const userChosenAnswer = currentQuestion.answers[userSelectedAnswer];
+quizQuestionContainer.appendChild(createElementWithText("h2", "Question:"));
+quizQuestionContainer.appendChild(
+  createElementWithText("p", currentQuestion.questionText)
+);
+
+quizQuestionContainer.appendChild(
+  createElementWithText("h2", "Your Chosen Answer:")
+);
+quizQuestionContainer.appendChild(
+  createElementWithText("p", userChosenAnswer.answerText)
+);
+
+quizQuestionContainer.appendChild(
+  createElementWithText("h2", "Correct Answer:")
+);
+quizQuestionContainer.appendChild(
+  createElementWithText("p", correctAnswer.answerText)
+);
+
+quizQuestionContainer.appendChild(
+  createElementWithText(
+    "p",
+    `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`
+  )
+);
 //removed some css styling here, css not related to js functionality shoudl be kept in the css file
