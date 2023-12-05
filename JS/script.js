@@ -51,11 +51,20 @@ const initializeQuizCategories = () => {
     clearContainerChildren(quizCategoryContainer);
     quizCategoryContainer.appendChild(createElementWithText("h1", "Choose Your Quiz"));
 
-    // Create and append buttons for each quiz category.
+    const buttonContainer = document.createElement("div");
+    buttonContainer.classList.add("category-button-container");
+
     quizObject.categoryArray.forEach(quizCategory => {
-        quizCategoryContainer.appendChild(createQuizButton(quizCategory.categoryName, () => selectQuizCategory(quizCategory.categoryName)));
+        const categoryButton = createQuizButton(quizCategory.categoryName, () => selectQuizCategory(quizCategory.categoryName));
+        //had to add some new classes to make it easier to style the buttons
+        categoryButton.classList.add("category-button");
+        buttonContainer.appendChild(categoryButton);
     });
+
+    quizCategoryContainer.appendChild(buttonContainer);
 };
+
+
 // Function to handle selection of a quiz category.
 const selectQuizCategory = (selectedCategoryName) => {
     const selectedCategory = quizObject.categoryArray.find(categoryItem => categoryItem.categoryName === selectedCategoryName);
@@ -84,39 +93,51 @@ const displayQuizProgress = () => {
 const displayQuizQuestion = () => {
     clearContainerChildren(quizQuestionContainer);
 
+    // Create a container for the question content and append it to quizQuestionContainer
+    const contentContainer = document.createElement("div");
+    //had to make some new classes to make it easier to style the quiz content
+    contentContainer.classList.add("quiz-content"); // Assign class for grid area "content"
+    quizQuestionContainer.appendChild(contentContainer);
+
+    // Append the category title
     const categoryTitle = createElementWithText("h2", currentQuizCategory.categoryName);
-    quizQuestionContainer.appendChild(categoryTitle);
+    contentContainer.appendChild(categoryTitle);
 
-    // Display quiz progress
-    displayQuizProgress();
+    // Display and append quiz progress
+    const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
+    const progressElement = createElementWithText("p", progressText);
+    contentContainer.appendChild(progressElement);
 
+    // Append the current question
     const currentQuestion = currentQuizCategory.questionArray[currentQuizQuestionIndex];
-    quizQuestionContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
+    contentContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
 
-    // Create and append buttons for each answer option.
+    // Create and append buttons for each answer option
     currentQuestion.answers.forEach(answer => {
         const answerButton = createQuizButton(answer.answerText, () => handleAnswerSelection(answerButton, answer.isCorrect));
         answerButton.classList.add("answer-button");
-        quizQuestionContainer.appendChild(answerButton);
+        contentContainer.appendChild(answerButton);
     });
 
-   // Append 'Previous' and 'Next' or 'Finish Quiz' buttons based on the current question index.
-   if (currentQuizQuestionIndex > 0) {
-    quizQuestionContainer.appendChild(createQuizButton("Previous", previousQuizQuestion));
-   }
-   if (currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1) {
-        quizQuestionContainer.appendChild(createQuizButton("Next", nextQuizQuestion));
+    // Append 'Previous' button if applicable
+    if (currentQuizQuestionIndex > 0) {
+        const prevButton = createQuizButton("Previous", previousQuizQuestion);
+        prevButton.classList.add("nav-button", "prev-button"); // Assign class for grid area "prev"
+        quizQuestionContainer.appendChild(prevButton);
+    }
 
-       
-   } else {
-        quizQuestionContainer.appendChild(createQuizButton("Finish Quiz", showQuizEndPage));
-        //removed some redundant code here, there was a call to some function that didn't exist
-   }
+    // Append 'Next' or 'Finish Quiz' button
+    //had to make some new classes to make it easier to style the quiz content
+    const nextOrFinishButton = currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1 ? 
+        createQuizButton("Next", nextQuizQuestion) : createQuizButton("Finish Quiz", showQuizEndPage);
+    nextOrFinishButton.classList.add("nav-button", currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1 ? "next-button" : "finish-button"); // Assign class for grid area "next"
+    quizQuestionContainer.appendChild(nextOrFinishButton);
 };
+
 
 // Function to handle the selection of an answer.
 const handleAnswerSelection = (selectedButton, isCorrect) => {
-    const answerButtons = quizQuestionContainer.querySelectorAll(".answer-button");
+    const answerButtons = quizQuestionContainer.querySelectorAll("answer-button");
     answerButtons.forEach(button => button.classList.remove("selected-answer"));
     selectedButton.classList.add("selected-answer");
     if (isCorrect) userQuizScore++;
@@ -157,10 +178,12 @@ const resetQuiz = () => {
     initializeQuizCategories();
 };
 // Function to create a home button with an event handler.(ilakia)
+//had to make some new classes to make it easier to style the quiz content
 const createHomeButton = (eventHandler) => {
     const homeButton = document.createElement("button");
     homeButton.textContent = "Home";
     homeButton.addEventListener("click", eventHandler);
+    homeButton.classList.add("home-button");
     return homeButton;
 };
 // Create and append the home button.(ilakia)
