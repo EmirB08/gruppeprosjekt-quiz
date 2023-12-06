@@ -81,6 +81,9 @@ const selectQuizCategory = (selectedCategoryName) => {
     currentQuizCategory = selectedCategory;
     currentQuizQuestionIndex = 0;
     userQuizScore = 0;
+
+    // Save the selected category to local storage
+    localStorage.setItem("selectedCategory", JSON.stringify(currentQuizCategory));
     quizCategoryContainer.style.display = "none";
     quizQuestionContainer.style.display = "grid"; // Hide category container
     displayQuizQuestion(); // Display the first question of the selected category
