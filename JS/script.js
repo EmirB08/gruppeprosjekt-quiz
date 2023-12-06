@@ -8,7 +8,6 @@ let currentQuizCategory,
   currentQuizQuestionIndex = 0,
   userQuizScore = 0;
 let quizStartTime; // Variable to store the start time of the quiz
-
 //these are just some utility functions to make it easier to create elements and append them to the DOM, you can use these if you want!
 // Function to create a new container element with a specified ID. - can be used to create additional  elements with a specified ID
 const createContainer = (containerId) => {
@@ -43,7 +42,6 @@ const quizCategoryContainer =
 const quizQuestionContainer =
   document.getElementById("quiz-question-container") ||
   createContainer("quiz-question-container");
-
 // Function to set up the main containers for the quiz categories and questions.
 const setupQuizContainers = () => {
   quizCategoryContainer.id = "quiz-category-container";
@@ -57,7 +55,6 @@ const initializeQuizCategories = () => {
   quizCategoryContainer.appendChild(
     createElementWithText("h1", "Choose Your Quiz")
   );
-
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("category-button-container");
 
@@ -69,12 +66,9 @@ const initializeQuizCategories = () => {
     categoryButton.classList.add("category-button");
     buttonContainer.appendChild(categoryButton);
   });
-
   quizCategoryContainer.appendChild(buttonContainer);
   quizQuestionContainer.style.display = "none";
 };
-// let quizStartTime; // Variable to store the start time of the quiz
-
 // Function to handle selection of a quiz category.
 const selectQuizCategory = (selectedCategoryName) => {
   const selectedCategory = quizObject.categoryArray.find(
@@ -90,14 +84,12 @@ const selectQuizCategory = (selectedCategoryName) => {
   currentQuizCategory = selectedCategory;
   currentQuizQuestionIndex = 0;
   userQuizScore = 0;
-
   // Save the selected category to local storage
   localStorage.setItem("selectedCategory", JSON.stringify(currentQuizCategory));
   quizCategoryContainer.style.display = "none";
   quizQuestionContainer.style.display = "grid"; // Hide category container
   displayQuizQuestion(); // Display the first question of the selected category
 };
-
 // Function to display the quiz progress (current question number and total number of questions).(ilakia)
 const displayQuizProgress = () => {
   const progressText = `Question ${currentQuizQuestionIndex + 1} of ${
@@ -117,23 +109,18 @@ const shuffleArray = (array) => {
 // Function to display the current quiz question and answer options.
 const displayQuizQuestion = () => {
   clearContainerChildren(quizQuestionContainer);
-
   // Shuffle the questions array for random order.
   const shuffledQuestions = shuffleArray(currentQuizCategory.questionArray);
-
   // to select the current question based on the current index.
   const currentQuestion = shuffledQuestions[currentQuizQuestionIndex];
-
   // Main container for the content
   const contentContainer = document.createElement("div");
   contentContainer.classList.add("quiz-content");
   quizQuestionContainer.appendChild(contentContainer);
-
   // Container for the question, title, and progress
   const questionInfoContainer = document.createElement("div");
   questionInfoContainer.classList.add("question-info");
   contentContainer.appendChild(questionInfoContainer);
-
   // Append the category title
   const categoryTitle = createElementWithText(
     "h2",
@@ -141,7 +128,6 @@ const displayQuizQuestion = () => {
   );
   categoryTitle.classList.add("category-title");
   questionInfoContainer.appendChild(categoryTitle);
-
   // Display and append quiz progress
   const progressText = `Question ${currentQuizQuestionIndex + 1} of ${
     currentQuizCategory.questionArray.length
@@ -153,12 +139,10 @@ const displayQuizQuestion = () => {
   questionInfoContainer.appendChild(
     createElementWithText("h2", currentQuestion.questionText)
   );
-
   // Container for the answer buttons
   const answerButtonsContainer = document.createElement("div");
   answerButtonsContainer.classList.add("answer-buttons");
   contentContainer.appendChild(answerButtonsContainer);
-
   // Create and append buttons for each answer option
   currentQuestion.answers.forEach((answer) => {
     const answerButton = createQuizButton(answer.answerText, () =>
@@ -167,14 +151,12 @@ const displayQuizQuestion = () => {
     answerButton.classList.add("answer-button");
     answerButtonsContainer.appendChild(answerButton);
   });
-
   // Append 'Previous' button if applicable
   if (currentQuizQuestionIndex > 0) {
     const prevButton = createQuizButton("Previous", previousQuizQuestion);
     prevButton.classList.add("nav-button", "prev-button"); // Assign class for grid area "prev"
     quizQuestionContainer.appendChild(prevButton);
   }
-
   // Append 'Next' or 'Finish Quiz' button
   //had to make some new classes to make it easier to style the quiz content
   const nextOrFinishButton =
@@ -189,54 +171,35 @@ const displayQuizQuestion = () => {
   ); // Assign class for grid area "next"
   quizQuestionContainer.appendChild(nextOrFinishButton);
 };
-
-<<<<<<< HEAD
 // Function to handle the selection of an answer.
 const handleAnswerSelection = (selectedButton, isCorrect) => {
-  const answerButtons = quizQuestionContainer.querySelectorAll("answer-button");
+  const answerButtons =
+    quizQuestionContainer.querySelectorAll(".answer-button");
+  // Check if an answer is already selected
+  const alreadySelected = selectedButton.classList.contains("selected-answer");
+  // Remove "selected-answer" class from all answer buttons
   answerButtons.forEach((button) => button.classList.remove("selected-answer"));
-  selectedButton.classList.add("selected-answer");
+  // Add "selected-answer" class to the newly selected answer if it wasn't already selected
+  if (!alreadySelected) {
+    selectedButton.classList.add("selected-answer");
+  }
   if (isCorrect) userQuizScore++;
-  //removed some redundant code here, there was a call to a button we removed
-=======
-
-// Function to handle the selection of an answer.
-const handleAnswerSelection = (selectedButton, isCorrect) => {
-    const answerButtons = quizQuestionContainer.querySelectorAll(".answer-button");
-
-    // Check if an answer is already selected
-    const alreadySelected = selectedButton.classList.contains("selected-answer");
-
-    // Remove "selected-answer" class from all answer buttons
-    answerButtons.forEach(button => button.classList.remove("selected-answer"));
-
-    // Add "selected-answer" class to the newly selected answer if it wasn't already selected
-    if (!alreadySelected) {
-        selectedButton.classList.add("selected-answer");
-    }
-
-    if (isCorrect) userQuizScore++;
-    // removed some redundant code here, there was a call to a button we removed
->>>>>>> dev
+  // removed some redundant code here, there was a call to a button we removed
 };
-
 // Functions to navigate to the previous and next quiz questions.
 const previousQuizQuestion = () => {
   currentQuizQuestionIndex--;
   displayQuizQuestion();
 };
-
 const nextQuizQuestion = () => {
   currentQuizQuestionIndex++;
   displayQuizQuestion();
 };
-
 /* ---------------
 !!! End page !!!
 ---------------- */
 
 const showQuizEndPage = () => {
-<<<<<<< HEAD
   clearContainerChildren(quizQuestionContainer);
   quizQuestionContainer.appendChild(
     createElementWithText("h2", "Quiz Completed!")
@@ -247,18 +210,6 @@ const showQuizEndPage = () => {
       `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`
     )
   );
-=======
-    clearContainerChildren(quizQuestionContainer);
-    
-    quizQuestionContainer.style.display = "flex";
-    quizQuestionContainer.style.flexDirection = "column";
-    quizQuestionContainer.style.alignItems = "center";
-    quizQuestionContainer.style.justifyContent = "center";
-    quizQuestionContainer.style.textAlign = "center";
-
-    quizQuestionContainer.appendChild(createElementWithText("h2", "Quiz Completed!"));
-    quizQuestionContainer.appendChild(createElementWithText("p", `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`));
->>>>>>> dev
 
   // Calculate the time taken(ilakia)
   const quizEndTime = new Date();
@@ -380,11 +331,5 @@ const displaySummary = () => {
 // Create the summary button
 const summaryButton = createSummaryButton(displaySummary);
 document.body.appendChild(summaryButton);
-
-
-
-
-
-
 
 //removed some css styling here, css not related to js functionality shoudl be kept in the css file
