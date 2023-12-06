@@ -120,16 +120,48 @@ const shuffleArray = (array) => {
     }
     return array;
 };
+
+
+
+let askedQuestions = []; // Array to store questions that have been asked
+
+// Function to shuffle an array without repeating questions
+const shuffleArrayWithoutRepeats = (array) => {
+    let currentIndex = array.length, randomIndex;
+
+    // While there remain elements to shuffle
+    while (currentIndex !== 0) {
+
+        // Pick a remaining element
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex--;
+
+        // Swap it with the current element
+        [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+};
 // Function to display the current quiz question and answer options.
 const displayQuizQuestion = () => {
     clearContainerChildren(quizQuestionContainer);
 
-     // Shuffle the questions array for random order.
-     const shuffledQuestions = shuffleArray(currentQuizCategory.questionArray);
+    // Check if all questions have been asked, if so, reset the askedQuestions array
+    if (askedQuestions.length === currentQuizCategory.questionArray.length) {
+        askedQuestions = [];
+    }
 
-     // to select the current question based on the current index.
-     const currentQuestion = shuffledQuestions[currentQuizQuestionIndex];
+    // Shuffle the questions array for random order without repeating questions.
+    const remainingQuestions = currentQuizCategory.questionArray.filter(question => !askedQuestions.includes(question));
+    const shuffledQuestions = shuffleArrayWithoutRepeats(remainingQuestions);
 
+    // to select the current question based on the current index.
+    const currentQuestion = shuffledQuestions[0];
+
+    // Add the current question to the askedQuestions array
+    askedQuestions.push(currentQuestion);
+
+     
     // Main container for the content
     const contentContainer = document.createElement("div");
     contentContainer.classList.add("quiz-content");
@@ -147,7 +179,7 @@ const displayQuizQuestion = () => {
 
     // Display and append quiz progress
 
-    displayQuizProgress();
+     displayQuizProgress();
     const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
     const progressElement = createElementWithText("p", progressText);
     questionInfoContainer.appendChild(progressElement);
