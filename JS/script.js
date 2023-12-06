@@ -191,6 +191,10 @@ const displayQuizQuestion = () => {
 
 // Function to handle the selection of an answer.
 const handleAnswerSelection = (selectedButton, isCorrect) => {
+  const answerIndex = Array.from(selectedButton.parentNode.children).indexOf(
+    selectedButton
+  );
+  userAnswers[currentQuizQuestionIndex] = answerIndex;
   const answerButtons =
     quizQuestionContainer.querySelectorAll(".answer-button");
 
