@@ -123,6 +123,7 @@ const displayQuizQuestion = () => {
     "h2",
     currentQuizCategory.categoryName
   );
+  categoryTitle.classList.add("category-title");
   questionInfoContainer.appendChild(categoryTitle);
 
   // Display and append quiz progress
