@@ -1,4 +1,4 @@
-//created an object to hold the quiz questions and answers for all three categories, just used some generated questions as placeholders!! replace with your own questions and answers for each category and add more (Im thinking 15 per category!) you have been assigned but follow the same format as the example below
+// created an object to hold the quiz questions and answers for all three categories, just used some generated questions as placeholders!! replace with your own questions and answers for each category and add more (I'm thinking 15 per category!) you have been assigned but follow the same format as the example below
 
 const quizObject = {
     categoryArray: [
@@ -38,30 +38,149 @@ const quizObject = {
             categoryName: "CSS",
             questionArray: [
                 {
-                    questionText: "What does CSS stand for?",
+                    questionText: "Specific colors properties can be specified in hexadecimal, RGB or HSL format.",
                     answers: [
-                        { answerText: "Colorful Style Sheets", isCorrect: false },
-                        { answerText: "Creative Style Sheets", isCorrect: false },
-                        { answerText: "Computer Style Sheets", isCorrect: false },
-                        { answerText: "Cascading Style Sheets", isCorrect: true }
+                        { answerText: "False", isCorrect: false },
+                        { answerText: "True", isCorrect: true }
                     ]
                 },
                 {
-                    questionText: "Which property is used to change the font of an element?",
+                    questionText: "Which of the following position properties makes an element stay at the same place regardless of scrolling?",
                     answers: [
-                        { answerText: "font-type", isCorrect: false },
-                        { answerText: "font-family", isCorrect: true },
-                        { answerText: "font-weight", isCorrect: false },
-                        { answerText: "text-style", isCorrect: false }
+                        { answerText: "Relative", isCorrect: false },
+                        { answerText: "Static", isCorrect: false },
+                        { answerText: "Absolute", isCorrect: false },
+                        { answerText: "Fixed", isCorrect: true }
                     ]
                 },
                 {
-                    questionText: "How do you select an element with the id 'demo'?",
+                    questionText: "Paragraph borders can only have pointed corners, not rounded corners.",
                     answers: [
-                        { answerText: ".demo", isCorrect: false },
-                        { answerText: "#demo", isCorrect: true },
-                        { answerText: "*demo", isCorrect: false },
-                        { answerText: "demo", isCorrect: false }
+                        { answerText: "True", isCorrect: false },
+                        { answerText: "False", isCorrect: true }
+                    ]
+                },
+                {
+                    questionText: "The following CSS code gives the code a dashed, red border on all sides of the paragraph element:\n\np {\n    border-bottom: 10px dashed red;\n}",
+                    answers: [
+                        { answerText: "True", isCorrect: false },
+                        { answerText: "False", isCorrect: true }
+                    ]
+                },
+                {
+                    questionText: "Which of the following HMTL elements keeps its formatting, in the case of the browser window being resized?",
+                    answers: [
+                        { answerText: "'<p>'", isCorrect: false },
+                        { answerText: "'<pre>'", isCorrect: true }
+                    ]
+                },
+                {
+                    questionText: "What is displayed if the image is not loaded correctly, in the following HTML code?\n\n<body>\n    <img src=\"www.images.com/umbrella.jpg\" alt=\"Umbrella\">\n</body>",
+                    answers: [
+                        { answerText: "Nothing is displayed", isCorrect: false },
+                        { answerText: "The text 'Umbrella'", isCorrect: true },
+                        { answerText: "A blank square", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "Fill in the missing property:\n\nWhat property can be used to make an element, such as a Search bar, stick to the right of the navigation bar?\n\n#searchbar {\n    (Enter your Answer): right;\n}",
+                    answers: [
+                        { answerText: "float", isCorrect: true },
+                        { answerText: "var", isCorrect: false },
+                        { answerText: "const", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "Putting a <button> inside <a> element is considered bad practice, violating the HTML5 specification.",
+                    answers: [
+                        { answerText: "True", isCorrect: true },
+                        { answerText: "False", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "The following code can be used to open YouTube webpage in a new browser tab:\n\n<a href=\"https://www.youtube.com\" target=\"_blank\"> YouTube </a>",
+                    answers: [
+                        { answerText: "True", isCorrect: true },
+                        { answerText: "False", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "The <br> element is an empty HTML element, which contains no content.",
+                    answers: [
+                        { answerText: "True", isCorrect: true },
+                        { answerText: "False", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "By default, margins are set to auto – the browser calculates them.",
+                    answers: [
+                        { answerText: "True", isCorrect: true },
+                        { answerText: "False", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "Which of the following functions allow us to bind a JS function to a button being pressed?",
+                    answers: [
+                        { answerText: "onhover()", isCorrect: false },
+                        { answerText: "onclick()", isCorrect: true },
+                        { answerText: "onpress()", isCorrect: false },
+                        { answerText: "onselect()", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "Which of the following tags in the code below refers to Table Cell data?\n\n<table>\n    <tr>\n        <th>Name</th>\n        <th>Weight (in kg)</th>\n        <th>Price (in Euro)</th>\n    </tr>\n    <tr>\n        <td>Banana</td>\n        <td>0.3</td>\n        <td>2</td>\n    </tr>\n</table>",
+                    answers: [
+                        { answerText: "'<tr>'", isCorrect: false },
+                        { answerText: "'<table>'", isCorrect: false },
+                        { answerText: "'<td>'", isCorrect: true },
+                        { answerText: "'<th>'", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "Which of the following text formatting tags is used to make text bold?",
+                    answers: [
+                        { answerText: "'<b>'", isCorrect: true },
+                        { answerText: "'<del>'", isCorrect: false },
+                        { answerText: "'<mark>'", isCorrect: false },
+                        { answerText: "'<sub>'", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "Which of the following creates spacing around HTML elements?",
+                    answers: [
+                        { answerText: "Margins", isCorrect: true },
+                        { answerText: "Padding", isCorrect: false },
+                        { answerText: "Borders", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "What kind of HTML list is displayed below:\n\n1. Dog\n2. Cat\n3. Bird",
+                    answers: [
+                        { answerText: "Numbered/Ordered List", isCorrect: true },
+                        { answerText: "Description List", isCorrect: false },
+                        { answerText: "Unnumbered/Unordered List", isCorrect: false }
+                    ]
+                },
+                {
+                    questionText: "Which transition-timing-function property can be used to change the size of the div by starting slowly?\n\n(div {\n    width: 100px;\n    height: 100px;\n    transition-property: width, height, transform;\n    transition-duration: 2s, 2s, 2s;\n    transition-timing-function: _______;\n    transition-delay: 1s;\n})",
+                    answers: [
+                        { answerText: "linear", isCorrect: false },
+                        { answerText: "ease-out", isCorrect: false },
+                        { answerText: "ease-in", isCorrect: true }
+                    ]
+                },
+                {
+                    questionText: "'.large' in the following CSS code segment refers to the id of an element.\n\n.large {\n    font-size: 300%;\n}",
+                    answers: [
+                        { answerText: "True", isCorrect: false },
+                        { answerText: "False", isCorrect: true }
+                    ]
+                },
+                {
+                    questionText: "CSS styling can be both inline, as well as in a separate CSS file.",
+                    answers: [
+                        { answerText: "True", isCorrect: true },
+                        { answerText: "False", isCorrect: false }
                     ]
                 }
             ]
@@ -78,24 +197,7 @@ const quizObject = {
                         { answerText: "#", isCorrect: false }
                     ]
                 },
-                {
-                    questionText: "Which method is used to write messages in the console?",
-                    answers: [
-                        { answerText: "console.write()", isCorrect: false },
-                        { answerText: "console.log()", isCorrect: true },
-                        { answerText: "console.output()", isCorrect: false },
-                        { answerText: "console.print()", isCorrect: false }
-                    ]
-                },
-                {
-                    questionText: "Which of the following is a JavaScript data type?",
-                    answers: [
-                        { answerText: "Number", isCorrect: true },
-                        { answerText: "Element", isCorrect: false },
-                        { answerText: "Tag", isCorrect: false },
-                        { answerText: "Link", isCorrect: false }
-                    ]
-                }
+                // ... (add more JavaScript questions here)
             ]
         }
     ]
