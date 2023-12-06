@@ -283,39 +283,53 @@ if (storedCategory) {
   initializeQuizCategories();
 }
 // Woring (André)
-const createSumeryButton = (eventHandler) => {
-  const sumeryButton = document.createElement("button");
-  sumeryButton.textContent = "Your Sumery";
-  sumeryButton.addEventListener("click", eventHandler);
-  sumeryButton.classList.add("sumery-btn");
-  return sumeryButton;
+const createSummaryButton = (eventHandler) => {
+  const summaryButton = document.createElement("button");
+  summaryButton.textContent = "Your Summary";
+  summaryButton.addEventListener("click", eventHandler);
+  summaryButton.classList.add("summary-btn");
+  return summaryButton;
 };
 
-//  Not finished.
-const userChosenAnswer = currentQuestion.answers[userSelectedAnswer];
-quizQuestionContainer.appendChild(createElementWithText("h2", "Question:"));
-quizQuestionContainer.appendChild(
-  createElementWithText("p", currentQuestion.questionText)
-);
+//  display the user's answers and correct answers
+const displaySummary = () => {
+  clearContainerChildren(quizQuestionContainer);
 
-quizQuestionContainer.appendChild(
-  createElementWithText("h2", "Your Chosen Answer:")
-);
-quizQuestionContainer.appendChild(
-  createElementWithText("p", userChosenAnswer.answerText)
-);
+  // Loop through each question
+  currentQuizCategory.questionArray.forEach((question, index) => {
+    const questionText = createElementWithText(
+      "h3",
+      `${index + 1}. ${question.questionText}`
+    );
+    quizQuestionContainer.appendChild(questionText);
 
-quizQuestionContainer.appendChild(
-  createElementWithText("h2", "Correct Answer:")
-);
-quizQuestionContainer.appendChild(
-  createElementWithText("p", correctAnswer.answerText)
-);
+    // Display user's chosen answer
+    const userAnswerIndex = userAnswers[index];
+    const userChosenAnswer =
+      userAnswerIndex !== undefined
+        ? question.answers[userAnswerIndex].answerText
+        : "Not answered";
+    const userAnswer = createElementWithText(
+      "p",
+      `Your Answer: ${userChosenAnswer}`
+    );
+    quizQuestionContainer.appendChild(userAnswer);
 
-quizQuestionContainer.appendChild(
-  createElementWithText(
-    "p",
-    `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`
-  )
-);
+    // Display correct answer
+    const correctAnswerIndex = question.answers.findIndex(
+      (answer) => answer.isCorrect
+    );
+    const correctAnswer = question.answers[correctAnswerIndex].answerText;
+    const correctAnswerText = createElementWithText(
+      "p",
+      `Correct Answer: ${correctAnswer}`
+    );
+    quizQuestionContainer.appendChild(correctAnswerText);
+  });
+};
+
+// Create the summary button
+const summaryButton = createSummaryButton(displaySummary);
+document.body.appendChild(summaryButton);
+
 //removed some css styling here, css not related to js functionality shoudl be kept in the css file
