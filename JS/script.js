@@ -74,6 +74,7 @@ const selectQuizCategory = (selectedCategoryName) => {
         return;
        
     }
+   
  // Record the start time when the quiz category is selected
   quizStartTime = new Date();
 
@@ -90,11 +91,27 @@ const selectQuizCategory = (selectedCategoryName) => {
 };
 
 // Function to display the quiz progress (current question number and total number of questions).(ilakia)
+// Function to display the quiz progress.
 const displayQuizProgress = () => {
+    // Ensure there is a valid currentQuizCategory
+    if (!currentQuizCategory) {
+        console.error("Current quiz category not set");
+        return;
+    }
+
+    // Clear existing progress element
+    const existingProgress = quizQuestionContainer.querySelector(".quiz-progress");
+    if (existingProgress) {
+        quizQuestionContainer.removeChild(existingProgress);
+    }
+
+    // Create a new progress element
     const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
     const progressElement = createElementWithText("p", progressText);
+    progressElement.classList.add("quiz-progress");
     quizQuestionContainer.appendChild(progressElement);
 };
+
 // Function to shuffle an array 
 const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -129,6 +146,8 @@ const displayQuizQuestion = () => {
     questionInfoContainer.appendChild(categoryTitle);
 
     // Display and append quiz progress
+
+    displayQuizProgress();
     const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
     const progressElement = createElementWithText("p", progressText);
     questionInfoContainer.appendChild(progressElement);
@@ -233,6 +252,7 @@ document.body.appendChild(homeButton);
 // Initialize the quiz containers and display categories.
 setupQuizContainers();
 
+
 // Check if there is a previously selected category in local storage
 const storedCategory = localStorage.getItem("selectedCategory");
 if (storedCategory) {
@@ -241,7 +261,6 @@ if (storedCategory) {
 } else {
     initializeQuizCategories();
 }
-
 
 
 
