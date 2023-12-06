@@ -190,6 +190,7 @@ const displayQuizQuestion = () => {
   quizQuestionContainer.appendChild(nextOrFinishButton);
 };
 
+<<<<<<< HEAD
 // Function to handle the selection of an answer.
 const handleAnswerSelection = (selectedButton, isCorrect) => {
   const answerButtons = quizQuestionContainer.querySelectorAll("answer-button");
@@ -197,6 +198,26 @@ const handleAnswerSelection = (selectedButton, isCorrect) => {
   selectedButton.classList.add("selected-answer");
   if (isCorrect) userQuizScore++;
   //removed some redundant code here, there was a call to a button we removed
+=======
+
+// Function to handle the selection of an answer.
+const handleAnswerSelection = (selectedButton, isCorrect) => {
+    const answerButtons = quizQuestionContainer.querySelectorAll(".answer-button");
+
+    // Check if an answer is already selected
+    const alreadySelected = selectedButton.classList.contains("selected-answer");
+
+    // Remove "selected-answer" class from all answer buttons
+    answerButtons.forEach(button => button.classList.remove("selected-answer"));
+
+    // Add "selected-answer" class to the newly selected answer if it wasn't already selected
+    if (!alreadySelected) {
+        selectedButton.classList.add("selected-answer");
+    }
+
+    if (isCorrect) userQuizScore++;
+    // removed some redundant code here, there was a call to a button we removed
+>>>>>>> dev
 };
 
 // Functions to navigate to the previous and next quiz questions.
@@ -215,6 +236,7 @@ const nextQuizQuestion = () => {
 ---------------- */
 
 const showQuizEndPage = () => {
+<<<<<<< HEAD
   clearContainerChildren(quizQuestionContainer);
   quizQuestionContainer.appendChild(
     createElementWithText("h2", "Quiz Completed!")
@@ -225,6 +247,18 @@ const showQuizEndPage = () => {
       `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`
     )
   );
+=======
+    clearContainerChildren(quizQuestionContainer);
+    
+    quizQuestionContainer.style.display = "flex";
+    quizQuestionContainer.style.flexDirection = "column";
+    quizQuestionContainer.style.alignItems = "center";
+    quizQuestionContainer.style.justifyContent = "center";
+    quizQuestionContainer.style.textAlign = "center";
+
+    quizQuestionContainer.appendChild(createElementWithText("h2", "Quiz Completed!"));
+    quizQuestionContainer.appendChild(createElementWithText("p", `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`));
+>>>>>>> dev
 
   // Calculate the time taken(ilakia)
   const quizEndTime = new Date();
@@ -346,5 +380,11 @@ const displaySummary = () => {
 // Create the summary button
 const summaryButton = createSummaryButton(displaySummary);
 document.body.appendChild(summaryButton);
+
+
+
+
+
+
 
 //removed some css styling here, css not related to js functionality shoudl be kept in the css file
