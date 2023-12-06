@@ -95,10 +95,23 @@ const displayQuizProgress = () => {
     const progressElement = createElementWithText("p", progressText);
     quizQuestionContainer.appendChild(progressElement);
 };
-
+// Function to shuffle an array 
+const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+};
 // Function to display the current quiz question and answer options.
 const displayQuizQuestion = () => {
     clearContainerChildren(quizQuestionContainer);
+
+     // Shuffle the questions array for random order.
+     const shuffledQuestions = shuffleArray(currentQuizCategory.questionArray);
+
+     // to select the current question based on the current index.
+     const currentQuestion = shuffledQuestions[currentQuizQuestionIndex];
 
     // Main container for the content
     const contentContainer = document.createElement("div");
@@ -121,7 +134,6 @@ const displayQuizQuestion = () => {
     questionInfoContainer.appendChild(progressElement);
 
     // Append the current question
-    const currentQuestion = currentQuizCategory.questionArray[currentQuizQuestionIndex];
     questionInfoContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
 
     // Container for the answer buttons
@@ -150,6 +162,7 @@ const displayQuizQuestion = () => {
     nextOrFinishButton.classList.add("nav-button", currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1 ? "next-button" : "finish-button"); // Assign class for grid area "next"
     quizQuestionContainer.appendChild(nextOrFinishButton);
 };
+
 
 
 // Function to handle the selection of an answer.
