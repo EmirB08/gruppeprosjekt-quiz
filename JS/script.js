@@ -248,6 +248,8 @@ const showQuizEndPage = () => {
   quizQuestionContainer.appendChild(
     createElementWithText("p", `Time taken: ${timeTaken} seconds`)
   );
+  const summaryButton = createSummaryButton(displaySummary);
+  quizQuestionContainer.appendChild(summaryButton);
 };
 
 // Function to finish the quiz and return to the category selection or home.
@@ -313,31 +315,6 @@ if (storedCategory) {
 /* ---------------
 !!! Working on (André) !!!
 ---------------- */
-// Function to restart the quiz
-const restartQuiz = () => {
-  userAnswers = [];
-  currentQuizCategory = null;
-  currentQuizQuestionIndex = 0;
-  userQuizScore = 0;
-
-  // Clear the quiz question container
-  clearContainerChildren(quizQuestionContainer);
-
-  // Display the first question of the current category
-  displayQuizQuestion();
-};
-
-// Function to create a restart quiz button
-const createRestartButton = () => {
-  const restartButton = document.createElement("button");
-  restartButton.textContent = "Restart Quiz";
-  restartButton.addEventListener("click", restartQuiz);
-  restartButton.classList.add("restart-btn");
-  return restartButton;
-};
-// Create and append the restart button to the document body
-const restartQuizButton = createRestartButton();
-document.body.appendChild(restartQuizButton);
 
 let userAnswers = [];
 const createSummaryButton = (eventHandler) => {
@@ -359,14 +336,7 @@ const displaySummary = () => {
       `${index + 1}. ${question.questionText}`
     );
     quizQuestionContainer.appendChild(questionText);
-    //
-    // Handel the selection of answer.
-    const handleAnswerSelection = (selectedButton, isCorrect) => {
-      const answerIndex = Array.from(
-        selectedButton.parentNode.children
-      ).indexOf(selectedButton);
-      userAnswers[currentQuizQuestionIndex] = answerIndex;
-    };
+
     // Display user's chosen answer
     const userAnswerSummary = userAnswers[index];
     const userChosenAnswer =
@@ -391,8 +361,5 @@ const displaySummary = () => {
     quizQuestionContainer.appendChild(correctAnswerText);
   });
 };
-// Create the summary button
-const summaryButton = createSummaryButton(displaySummary);
-document.body.appendChild(summaryButton);
 
 //removed some css styling here, css not related to js functionality shoudl be kept in the css file
