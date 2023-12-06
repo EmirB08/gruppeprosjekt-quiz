@@ -282,7 +282,9 @@ if (storedCategory) {
 } else {
   initializeQuizCategories();
 }
-// Woring (André)
+/* ---------------
+!!! Working on (André) !!!
+---------------- */
 const createSummaryButton = (eventHandler) => {
   const summaryButton = document.createElement("button");
   summaryButton.textContent = "Your Summary";
@@ -304,10 +306,10 @@ const displaySummary = () => {
     quizQuestionContainer.appendChild(questionText);
 
     // Display user's chosen answer
-    const userAnswerIndex = userAnswers[index];
+    const userAnswerSummary = userAnswers[index];
     const userChosenAnswer =
-      userAnswerIndex !== undefined
-        ? question.answers[userAnswerIndex].answerText
+      userAnswerSummary !== undefined
+        ? question.answers[userAnswerSummary].answerText
         : "Not answered";
     const userAnswer = createElementWithText(
       "p",
@@ -327,7 +329,6 @@ const displaySummary = () => {
     quizQuestionContainer.appendChild(correctAnswerText);
   });
 };
-
 // Create the summary button
 const summaryButton = createSummaryButton(displaySummary);
 document.body.appendChild(summaryButton);
