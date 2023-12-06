@@ -361,5 +361,3 @@ const displaySummary = () => {
     quizQuestionContainer.appendChild(correctAnswerText);
   });
 };
-
-//removed some css styling here, css not related to js functionality shoudl be kept in the css file

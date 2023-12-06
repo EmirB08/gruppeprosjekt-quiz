@@ -6,4 +6,4 @@ Gruppeprosjekt for gruppe AEI
 
 André
 
-- Working
+- Working on sumery
