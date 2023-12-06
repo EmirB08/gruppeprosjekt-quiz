@@ -10,7 +10,7 @@ body {
     height: 100vh;
     width: 100vw;
     font-family: 'Roboto', sans-serif;
-    background-color: #f8f8f8;
+    background-color: rgb(255, 255, 255);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -40,7 +40,7 @@ body {
     width: 90px;
     margin: 5px;
     padding: 10px;
-    background-color: #4285f4;
+    background-color: #1A73E8;
     color: #ffffff;
     border: 0px solid black;
     border-radius: 5px;
@@ -55,7 +55,7 @@ body {
 .home-button {
     padding: 10px;
     margin: 10px;
-    background-color: #4CAF50;
+    background-color: #1A73E8;
     color: white;
     border: none;
     border-radius: 5px;
@@ -77,21 +77,24 @@ body {
     "prev content next";
     align-items: center;
     justify-items: center;
+    border: 1px solid rgb(218, 220, 224);
+    border-radius: 5px;
+    box-shadow: 3px 3px 10px 3px rgba(0,0,0,0.1);
 }
 
 .prev-button {
     grid-area: prev;
     padding: 10px;
     margin: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+    color: rgb(26, 115, 232);
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(218, 220, 224);
     border-radius: 5px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
 }
 
-prev-button:hover {
+.prev-button:hover {
     transform: scale(1.1);
 }
 
@@ -99,15 +102,15 @@ prev-button:hover {
     grid-area: next;
     padding: 10px;
     margin: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+    color: rgb(26, 115, 232);
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(218, 220, 224);
     border-radius: 5px;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
 }
 
-next-button:hover, .finish-button:hover {
+.next-button:hover, .finish-button:hover {
     transform: scale(1.1);
 }
 
@@ -123,18 +126,19 @@ next-button:hover, .finish-button:hover {
     width: 400px;
     height: 50px;
     margin: 5px 0;
-    background-color: #4285f4;
+    background-color: #1A73E8;
     color: #ffffff;
     border: 0px solid black;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
     padding: 10px;
-    transition: transform 0.3s ease-in-out;
+    transition: transform 0.2s ease-in-out;
 }
 
 .answer-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.01);
+    background-color: rgb(23, 78, 166);
 }
 
 
@@ -174,6 +178,26 @@ h1 {
 }
 
 .selected-answer {
-    background-color: #4CAF50;
+    background-color: rgb(253, 171, 38);
 }
 
+#quiz-end-container {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f0f0; /* Light background for contrast */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+}
+
+#quiz-end-container h2 {
+    font-size: 2em;
+    color: #4CAF50; /* Adjust color as needed */
+    margin-bottom: 15px;
+}
+
+#quiz-end-container p {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 10px;
+}

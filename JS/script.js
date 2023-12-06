@@ -164,14 +164,23 @@ const displayQuizQuestion = () => {
 };
 
 
-
 // Function to handle the selection of an answer.
 const handleAnswerSelection = (selectedButton, isCorrect) => {
-    const answerButtons = quizQuestionContainer.querySelectorAll("answer-button");
+    const answerButtons = quizQuestionContainer.querySelectorAll(".answer-button");
+
+    // Check if an answer is already selected
+    const alreadySelected = selectedButton.classList.contains("selected-answer");
+
+    // Remove "selected-answer" class from all answer buttons
     answerButtons.forEach(button => button.classList.remove("selected-answer"));
-    selectedButton.classList.add("selected-answer");
+
+    // Add "selected-answer" class to the newly selected answer if it wasn't already selected
+    if (!alreadySelected) {
+        selectedButton.classList.add("selected-answer");
+    }
+
     if (isCorrect) userQuizScore++;
-    //removed some redundant code here, there was a call to a button we removed
+    // removed some redundant code here, there was a call to a button we removed
 };
 
 // Functions to navigate to the previous and next quiz questions.
@@ -187,6 +196,13 @@ const nextQuizQuestion = () => {
 
 const showQuizEndPage = () => {
     clearContainerChildren(quizQuestionContainer);
+    
+    quizQuestionContainer.style.display = "flex";
+    quizQuestionContainer.style.flexDirection = "column";
+    quizQuestionContainer.style.alignItems = "center";
+    quizQuestionContainer.style.justifyContent = "center";
+    quizQuestionContainer.style.textAlign = "center";
+
     quizQuestionContainer.appendChild(createElementWithText("h2", "Quiz Completed!"));
     quizQuestionContainer.appendChild(createElementWithText("p", `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`));
 
@@ -232,6 +248,12 @@ if (storedCategory) {
 } else {
     initializeQuizCategories();
 }
+
+
+
+
+
+
 
 
 
