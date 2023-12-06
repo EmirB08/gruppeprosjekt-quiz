@@ -8,6 +8,7 @@ let currentQuizCategory,
   currentQuizQuestionIndex = 0,
   userQuizScore = 0;
 let quizStartTime; // Variable to store the start time of the quiz
+
 //these are just some utility functions to make it easier to create elements and append them to the DOM, you can use these if you want!
 // Function to create a new container element with a specified ID. - can be used to create additional  elements with a specified ID
 const createContainer = (containerId) => {
@@ -42,6 +43,7 @@ const quizCategoryContainer =
 const quizQuestionContainer =
   document.getElementById("quiz-question-container") ||
   createContainer("quiz-question-container");
+
 // Function to set up the main containers for the quiz categories and questions.
 const setupQuizContainers = () => {
   quizCategoryContainer.id = "quiz-category-container";
@@ -55,6 +57,7 @@ const initializeQuizCategories = () => {
   quizCategoryContainer.appendChild(
     createElementWithText("h1", "Choose Your Quiz")
   );
+
   const buttonContainer = document.createElement("div");
   buttonContainer.classList.add("category-button-container");
 
@@ -66,9 +69,11 @@ const initializeQuizCategories = () => {
     categoryButton.classList.add("category-button");
     buttonContainer.appendChild(categoryButton);
   });
+
   quizCategoryContainer.appendChild(buttonContainer);
   quizQuestionContainer.style.display = "none";
 };
+
 // Function to handle selection of a quiz category.
 const selectQuizCategory = (selectedCategoryName) => {
   const selectedCategory = quizObject.categoryArray.find(
@@ -78,26 +83,46 @@ const selectQuizCategory = (selectedCategoryName) => {
     console.error("Category not found:", selectedCategoryName);
     return;
   }
+
   // Record the start time when the quiz category is selected
   quizStartTime = new Date();
 
   currentQuizCategory = selectedCategory;
   currentQuizQuestionIndex = 0;
   userQuizScore = 0;
+
   // Save the selected category to local storage
   localStorage.setItem("selectedCategory", JSON.stringify(currentQuizCategory));
   quizCategoryContainer.style.display = "none";
   quizQuestionContainer.style.display = "grid"; // Hide category container
   displayQuizQuestion(); // Display the first question of the selected category
 };
+
 // Function to display the quiz progress (current question number and total number of questions).(ilakia)
+// Function to display the quiz progress.
 const displayQuizProgress = () => {
+  // Ensure there is a valid currentQuizCategory
+  if (!currentQuizCategory) {
+    console.error("Current quiz category not set");
+    return;
+  }
+
+  // Clear existing progress element
+  const existingProgress =
+    quizQuestionContainer.querySelector(".quiz-progress");
+  if (existingProgress) {
+    quizQuestionContainer.removeChild(existingProgress);
+  }
+
+  // Create a new progress element
   const progressText = `Question ${currentQuizQuestionIndex + 1} of ${
     currentQuizCategory.questionArray.length
   }`;
   const progressElement = createElementWithText("p", progressText);
+  progressElement.classList.add("quiz-progress");
   quizQuestionContainer.appendChild(progressElement);
 };
+
 // Function to shuffle an array
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {
@@ -106,21 +131,60 @@ const shuffleArray = (array) => {
   }
   return array;
 };
+
+let askedQuestions = []; // Array to store questions that have been asked
+
+// Function to shuffle an array without repeating questions
+const shuffleArrayWithoutRepeats = (array) => {
+  let currentIndex = array.length,
+    randomIndex;
+
+  // While there remain elements to shuffle
+  while (currentIndex !== 0) {
+    // Pick a remaining element
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // Swap it with the current element
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex],
+      array[currentIndex],
+    ];
+  }
+
+  return array;
+};
 // Function to display the current quiz question and answer options.
 const displayQuizQuestion = () => {
   clearContainerChildren(quizQuestionContainer);
-  // Shuffle the questions array for random order.
-  const shuffledQuestions = shuffleArray(currentQuizCategory.questionArray);
+
+  // Check if all questions have been asked, if so, reset the askedQuestions array
+  if (askedQuestions.length === currentQuizCategory.questionArray.length) {
+    askedQuestions = [];
+  }
+
+  // Shuffle the questions array for random order without repeating questions.
+  const remainingQuestions = currentQuizCategory.questionArray.filter(
+    (question) => !askedQuestions.includes(question)
+  );
+  const shuffledQuestions = shuffleArrayWithoutRepeats(remainingQuestions);
+
   // to select the current question based on the current index.
-  const currentQuestion = shuffledQuestions[currentQuizQuestionIndex];
+  const currentQuestion = shuffledQuestions[0];
+
+  // Add the current question to the askedQuestions array
+  askedQuestions.push(currentQuestion);
+
   // Main container for the content
   const contentContainer = document.createElement("div");
   contentContainer.classList.add("quiz-content");
   quizQuestionContainer.appendChild(contentContainer);
+
   // Container for the question, title, and progress
   const questionInfoContainer = document.createElement("div");
   questionInfoContainer.classList.add("question-info");
   contentContainer.appendChild(questionInfoContainer);
+
   // Append the category title
   const categoryTitle = createElementWithText(
     "h2",
@@ -128,7 +192,10 @@ const displayQuizQuestion = () => {
   );
   categoryTitle.classList.add("category-title");
   questionInfoContainer.appendChild(categoryTitle);
+
   // Display and append quiz progress
+
+  displayQuizProgress();
   const progressText = `Question ${currentQuizQuestionIndex + 1} of ${
     currentQuizCategory.questionArray.length
   }`;
@@ -139,10 +206,12 @@ const displayQuizQuestion = () => {
   questionInfoContainer.appendChild(
     createElementWithText("h2", currentQuestion.questionText)
   );
+
   // Container for the answer buttons
   const answerButtonsContainer = document.createElement("div");
   answerButtonsContainer.classList.add("answer-buttons");
   contentContainer.appendChild(answerButtonsContainer);
+
   // Create and append buttons for each answer option
   currentQuestion.answers.forEach((answer) => {
     const answerButton = createQuizButton(answer.answerText, () =>
@@ -151,12 +220,14 @@ const displayQuizQuestion = () => {
     answerButton.classList.add("answer-button");
     answerButtonsContainer.appendChild(answerButton);
   });
+
   // Append 'Previous' button if applicable
   if (currentQuizQuestionIndex > 0) {
     const prevButton = createQuizButton("Previous", previousQuizQuestion);
     prevButton.classList.add("nav-button", "prev-button"); // Assign class for grid area "prev"
     quizQuestionContainer.appendChild(prevButton);
   }
+
   // Append 'Next' or 'Finish Quiz' button
   //had to make some new classes to make it easier to style the quiz content
   const nextOrFinishButton =
@@ -171,30 +242,38 @@ const displayQuizQuestion = () => {
   ); // Assign class for grid area "next"
   quizQuestionContainer.appendChild(nextOrFinishButton);
 };
+
 // Function to handle the selection of an answer.
 const handleAnswerSelection = (selectedButton, isCorrect) => {
   const answerButtons =
     quizQuestionContainer.querySelectorAll(".answer-button");
+
   // Check if an answer is already selected
   const alreadySelected = selectedButton.classList.contains("selected-answer");
+
   // Remove "selected-answer" class from all answer buttons
   answerButtons.forEach((button) => button.classList.remove("selected-answer"));
+
   // Add "selected-answer" class to the newly selected answer if it wasn't already selected
   if (!alreadySelected) {
     selectedButton.classList.add("selected-answer");
   }
+
   if (isCorrect) userQuizScore++;
   // removed some redundant code here, there was a call to a button we removed
 };
+
 // Functions to navigate to the previous and next quiz questions.
 const previousQuizQuestion = () => {
   currentQuizQuestionIndex--;
   displayQuizQuestion();
 };
+
 const nextQuizQuestion = () => {
   currentQuizQuestionIndex++;
   displayQuizQuestion();
 };
+
 /* ---------------
 !!! End page !!!
 ---------------- */
@@ -284,6 +363,7 @@ if (storedCategory) {
 /* ---------------
 !!! Working on (André) !!!
 ---------------- */
+let userAnswers = [];
 const createSummaryButton = (eventHandler) => {
   const summaryButton = document.createElement("button");
   summaryButton.textContent = "Your Summary";
@@ -303,7 +383,14 @@ const displaySummary = () => {
       `${index + 1}. ${question.questionText}`
     );
     quizQuestionContainer.appendChild(questionText);
-
+    //
+    // Handel the selection of answer.
+    const handleAnswerSelection = (selectedButton, isCorrect) => {
+      const answerIndex = Array.from(
+        selectedButton.parentNode.children
+      ).indexOf(selectedButton);
+      userAnswers[currentQuizQuestionIndex] = answerIndex;
+    };
     // Display user's chosen answer
     const userAnswerSummary = userAnswers[index];
     const userChosenAnswer =
