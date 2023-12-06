@@ -311,8 +311,7 @@ if (storedCategory) {
 ---------------- */
 // Function to restart the quiz
 const restartQuiz = () => {
-  // Clear user answers and reset quiz variables
-  userAnswers = []; // Assuming you have an array to store user answers
+  userAnswers = [];
   currentQuizCategory = null;
   currentQuizQuestionIndex = 0;
   userQuizScore = 0;
@@ -335,8 +334,6 @@ const createRestartButton = () => {
 // Create and append the restart button to the document body
 const restartQuizButton = createRestartButton();
 document.body.appendChild(restartQuizButton);
-//
-//
 
 let userAnswers = [];
 const createSummaryButton = (eventHandler) => {
