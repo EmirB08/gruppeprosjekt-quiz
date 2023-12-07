@@ -57,45 +57,35 @@ buttonContainer.appendChild(categoryButton);
 });
 
 quizCategoryContainer.appendChild(buttonContainer);
-quizQuestionContainer.style.display = "none";
+quizQuestionContainer.style.display = "none"; // Hide the quiz question container
 };
 
-
-
-
-// Function to handle selection of a quiz category.
-const selectQuizCategory = (selectedCategoryName) => {
+const selectQuizCategory = (selectedCategoryName) => { // Function to handle selection of a quiz category.
 const selectedCategory = quizObject.categoryArray.find(categoryItem => categoryItem.categoryName === selectedCategoryName);
 if (!selectedCategory) {
 console.error("Category not found:", selectedCategoryName);
 return;
 }
-// Record the start time when the quiz category is selected
-quizStartTime = new Date();
+
+quizStartTime = new Date(); // Record the start time when the quiz category is selected
 currentQuizCategory = selectedCategory;
 currentQuizQuestionIndex = 0;
 userQuizScore = 0;
 
-
-
-
-// Save the selected category to local storage
-localStorage.setItem("selectedCategory", JSON.stringify(currentQuizCategory));
+localStorage.setItem("selectedCategory", JSON.stringify(currentQuizCategory)); // Save the selected category to local storage
 quizCategoryContainer.style.display = "none";
 quizQuestionContainer.style.display = "grid";
 currentQuizCategory.questionArray = shuffleArray(currentQuizCategory.questionArray); // Hide category container
 displayQuizQuestion(); // Display the first question of the selected category
 };
 
-
-// Function to display the quiz progress (current question number and total number of questions).(ilakia)
-const displayQuizProgress = () => {
+const displayQuizProgress = () => { // Function to display the quiz progress (current question number and total number of questions).(ilakia)
 const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
 const progressElement = createElementWithText("p", progressText);
 quizQuestionContainer.appendChild(progressElement);
 };
-// Function to shuffle an array
-const shuffleArray = (array) => {
+
+const shuffleArray = (array) => { // Function to shuffle an array to randomize the order of the questions.
 for (let i = array.length - 1; i > 0; i--) {
 const j = Math.floor(Math.random() * (i + 1));
 [array[i], array[j]] = [array[j], array[i]];
@@ -103,16 +93,11 @@ const j = Math.floor(Math.random() * (i + 1));
 return array;
 };
 
-const displayQuizQuestion = () => {
+const displayQuizQuestion = () => { // Function to display the current quiz question - might do a refactor of this function later to use the questObject ids instead of the index
     clearContainerChildren(quizQuestionContainer);
 
-     // Shuffle the questions array for random order.
-     const shuffledQuestions = shuffleArray(currentQuizCategory.questionArray);
+    const currentQuestion = currentQuizCategory.questionArray[currentQuizQuestionIndex];
 
-     // to select the current question based on the current index.
-     const currentQuestion = shuffledQuestions[currentQuizQuestionIndex];
-
-    // Main container for the content
     const contentContainer = document.createElement("div");
     contentContainer.classList.add("quiz-content"); //adding classes for css styling
     quizQuestionContainer.appendChild(contentContainer);
@@ -125,7 +110,6 @@ const displayQuizQuestion = () => {
     categoryTitle.classList.add("category-title"); // adding classes for css styling
     questionInfoContainer.appendChild(categoryTitle);
 
-    // Display and append quiz progress
     const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
     const progressElement = createElementWithText("p", progressText);
     questionInfoContainer.appendChild(progressElement);
@@ -153,16 +137,13 @@ const displayQuizQuestion = () => {
     quizQuestionContainer.appendChild(nextButton);
 };
 
-
-
-//KAN SIKKERT FLYTTE DENNE TIL TOPPEN AV SCRIPTET
-let userAnswers = {};
-//DRAR INN DE NYE PARAMETERENE HER
-const handleAnswerSelection = (selectedButton, questionId, selectedAnswerText, isCorrect) => {
+const handleAnswerSelection = (selectedButton, questionId, selectedAnswerText, isCorrect) => { // Function to handle selection of an answer, has added parameters to use for the userAnswers object
     const answerButtons = quizQuestionContainer.querySelectorAll(".answer-button");
 
     // Remove "selected-answer" class from all answer buttons
     answerButtons.forEach(button => button.classList.remove("selected-answer"));
+
+    // Add "selected-answer" class to the newly selected answer
     selectedButton.classList.add("selected-answer");
 
     // questionId is the id of the current question
@@ -172,10 +153,7 @@ const handleAnswerSelection = (selectedButton, questionId, selectedAnswerText, i
     };
 };
 
-
-
-// Functions to navigate to the previous and next quiz questions.
-const previousQuizQuestion = () => {
+const previousQuizQuestion = () => { // Functions to navigate to the previous questions - could be removed
 currentQuizQuestionIndex--;
 displayQuizQuestion();
 };
@@ -266,17 +244,8 @@ displayQuizQuestion();
 initializeQuizCategories();
 }
 
-
-
-
-
-
-
-
-
-
-//removed some css styling here, css not related to js functionality shoudl be kept in the css file
-
+setupQuizContainers(); // Initialize the quiz containers and display categories.
+//TEST MERGE
 
 
 
