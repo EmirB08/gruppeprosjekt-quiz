@@ -112,7 +112,7 @@ const j = Math.floor(Math.random() * (i + 1));
 return array;
 };
 // Function to display the current quiz question and answer options.
-const displayQuizQuestion = () => {
+/* const displayQuizQuestion = () => {
 clearContainerChildren(quizQuestionContainer);
 
 // to select the current question based on the current index.
@@ -175,7 +175,52 @@ const nextOrFinishButton = currentQuizQuestionIndex < currentQuizCategory.questi
 createQuizButton("Next", nextQuizQuestion) : createQuizButton("Finish Quiz", showQuizEndPage);
 nextOrFinishButton.classList.add("nav-button", currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1 ? "next-button" : "finish-button"); // Assign class for grid area "next"
 quizQuestionContainer.appendChild(nextOrFinishButton);
+}; */
+
+const displayQuizQuestion = () => {
+    clearContainerChildren(quizQuestionContainer);
+
+    const currentQuestion = currentQuizCategory.questionArray[currentQuizQuestionIndex];
+
+    const contentContainer = document.createElement("div");
+    contentContainer.classList.add("quiz-content");
+    quizQuestionContainer.appendChild(contentContainer);
+
+    const questionInfoContainer = document.createElement("div");
+    questionInfoContainer.classList.add("question-info");
+    contentContainer.appendChild(questionInfoContainer);
+
+    const categoryTitle = createElementWithText("h2", currentQuizCategory.categoryName);
+    categoryTitle.classList.add("category-title");
+    questionInfoContainer.appendChild(categoryTitle);
+
+    const progressText = `Question ${currentQuizQuestionIndex + 1} of ${currentQuizCategory.questionArray.length}`;
+    const progressElement = createElementWithText("p", progressText);
+    questionInfoContainer.appendChild(progressElement);
+
+    questionInfoContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
+
+    const answerButtonsContainer = document.createElement("div");
+    answerButtonsContainer.classList.add("answer-buttons");
+    contentContainer.appendChild(answerButtonsContainer);
+
+    currentQuestion.answers.forEach(answer => {
+        const answerButton = createQuizButton(answer.answerText, () => handleAnswerSelection(answerButton, currentQuestion.id, answer.answerText, answer.isCorrect));
+        answerButton.classList.add("answer-button");
+        answerButtonsContainer.appendChild(answerButton);
+    });
+
+    if (currentQuizQuestionIndex > 0) {
+        const prevButton = createQuizButton("Previous", previousQuizQuestion);
+        prevButton.classList.add("nav-button", "prev-button");
+        quizQuestionContainer.appendChild(prevButton);
+    }
+
+    const nextButton = createQuizButton("Next", nextQuizQuestion);
+    nextButton.classList.add("nav-button", "next-button");
+    quizQuestionContainer.appendChild(nextButton);
 };
+
 
 
 //KAN SIKKERT FLYTTE DENNE TIL TOPPEN AV SCRIPTET
