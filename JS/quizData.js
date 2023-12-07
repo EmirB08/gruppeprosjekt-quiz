@@ -482,3 +482,5 @@ const quizObject = {
 console.log("Quiz Object:", quizObject);
 
 export default quizObject;
+
+//TEST MERGE ERROR
