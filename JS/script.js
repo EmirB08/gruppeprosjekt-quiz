@@ -245,7 +245,7 @@ initializeQuizCategories();
 }
 
 setupQuizContainers(); // Initialize the quiz containers and display categories.
-
+//TEST MERGE
 
 
 
