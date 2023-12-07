@@ -5,7 +5,8 @@ const quizObject = {
         {
             categoryName: "HTML",
             questionArray: [
-                {
+                {   
+                    id: 1,
                     questionText: "What does HTML stand for?",
                     answers: [
                         { answerText: "Hyper Trainer Marking Language", isCorrect: false },
@@ -14,7 +15,8 @@ const quizObject = {
                         { answerText: "Home Tool Markup Language", isCorrect: false }
                     ]
                 },
-                {
+                {   
+                    id: 2,
                     questionText: "Which HTML element represents the root of an HTML document?",
                     answers: [
                         { answerText: "<root>", isCorrect: false },
@@ -23,7 +25,7 @@ const quizObject = {
                         { answerText: "<head>", isCorrect: false }
                     ]
                 },
-                {
+                {   id: 3,
                     questionText: "Which element is used to specify a footer for a document or section?",
                     answers: [
                         { answerText: "<bottom>", isCorrect: false },
@@ -37,7 +39,8 @@ const quizObject = {
         {
             categoryName: "CSS",
             questionArray: [
-                {
+                {   
+                    id: 4,
                     questionText: "What does CSS stand for?",
                     answers: [
                         { answerText: "Colorful Style Sheets", isCorrect: false },
@@ -46,7 +49,8 @@ const quizObject = {
                         { answerText: "Cascading Style Sheets", isCorrect: true }
                     ]
                 },
-                {
+                {   
+                    id: 5,
                     questionText: "Which property is used to change the font of an element?",
                     answers: [
                         { answerText: "font-type", isCorrect: false },
@@ -55,7 +59,8 @@ const quizObject = {
                         { answerText: "text-style", isCorrect: false }
                     ]
                 },
-                {
+                {   
+                    id: 6,
                     questionText: "How do you select an element with the id 'demo'?",
                     answers: [
                         { answerText: ".demo", isCorrect: false },
@@ -69,7 +74,7 @@ const quizObject = {
         {
             categoryName: "JavaScript",
             questionArray: [
-                {
+                {   id: 7,
                     questionText: "Which symbol is used for comments in JavaScript?",
                     answers: [
                         { answerText: "//", isCorrect: true },
@@ -78,7 +83,8 @@ const quizObject = {
                         { answerText: "#", isCorrect: false }
                     ]
                 },
-                {
+                {   
+                    id: 8,
                     questionText: "Which method is used to write messages in the console?",
                     answers: [
                         { answerText: "console.write()", isCorrect: false },
@@ -87,7 +93,8 @@ const quizObject = {
                         { answerText: "console.print()", isCorrect: false }
                     ]
                 },
-                {
+                {   
+                    id: 9,
                     questionText: "Which of the following is a JavaScript data type?",
                     answers: [
                         { answerText: "Number", isCorrect: true },
