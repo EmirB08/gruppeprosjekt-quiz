@@ -10,7 +10,7 @@ let currentQuizCategory,
 let quizStartTime; // Variable to store the start time of the quiz
 
 //these are just some utility functions to make it easier to create elements and append them to the DOM, you can use these if you want!
-// Function to create a new container element with a specified ID. - can be used to create additional  elements with a specified ID
+// Function to create a new container element with a specified ID. - can be used to create additional elements with a specified ID
 const createContainer = (containerId) => {
   const container = document.createElement("div");
   container.id = containerId;
@@ -85,7 +85,6 @@ const selectQuizCategory = (selectedCategoryName) => {
   }
   // Record the start time when the quiz category is selected
   quizStartTime = new Date();
-
   currentQuizCategory = selectedCategory;
   currentQuizQuestionIndex = 0;
   userQuizScore = 0;
@@ -93,7 +92,10 @@ const selectQuizCategory = (selectedCategoryName) => {
   // Save the selected category to local storage
   localStorage.setItem("selectedCategory", JSON.stringify(currentQuizCategory));
   quizCategoryContainer.style.display = "none";
-  quizQuestionContainer.style.display = "grid"; // Hide category container
+  quizQuestionContainer.style.display = "grid";
+  currentQuizCategory.questionArray = shuffleArray(
+    currentQuizCategory.questionArray
+  ); // Hide category container
   displayQuizQuestion(); // Display the first question of the selected category
 };
 
@@ -117,11 +119,9 @@ const shuffleArray = (array) => {
 const displayQuizQuestion = () => {
   clearContainerChildren(quizQuestionContainer);
 
-  // Shuffle the questions array for random order.
-  const shuffledQuestions = shuffleArray(currentQuizCategory.questionArray);
-
   // to select the current question based on the current index.
-  const currentQuestion = shuffledQuestions[currentQuizQuestionIndex];
+  const currentQuestion =
+    currentQuizCategory.questionArray[currentQuizQuestionIndex];
 
   // Main container for the content
   const contentContainer = document.createElement("div");
@@ -158,10 +158,15 @@ const displayQuizQuestion = () => {
   answerButtonsContainer.classList.add("answer-buttons");
   contentContainer.appendChild(answerButtonsContainer);
 
-  // Create and append buttons for each answer option
+  // DRAR INN DE NYE FUNKSJONENE HER TROR DET ER ENESTE STED JEG BRUKER DEM
   currentQuestion.answers.forEach((answer) => {
     const answerButton = createQuizButton(answer.answerText, () =>
-      handleAnswerSelection(answerButton, answer.isCorrect)
+      handleAnswerSelection(
+        answerButton,
+        currentQuestion.id,
+        answer.answerText,
+        answer.isCorrect
+      )
     );
     answerButton.classList.add("answer-button");
     answerButtonsContainer.appendChild(answerButton);
@@ -189,28 +194,29 @@ const displayQuizQuestion = () => {
   quizQuestionContainer.appendChild(nextOrFinishButton);
 };
 
-// Function to handle the selection of an answer.
-const handleAnswerSelection = (selectedButton, isCorrect) => {
-  const answerIndex = Array.from(selectedButton.parentNode.children).indexOf(
-    selectedButton
-  );
-  userAnswers[currentQuizQuestionIndex] = answerIndex;
+//KAN SIKKERT FLYTTE DENNE TIL TOPPEN AV SCRIPTET
+let userAnswers = {};
+//DRAR INN DE NYE PARAMETERENE HER
+const handleAnswerSelection = (
+  selectedButton,
+  questionId,
+  selectedAnswerText,
+  isCorrect
+) => {
   const answerButtons =
     quizQuestionContainer.querySelectorAll(".answer-button");
-
-  // Check if an answer is already selected
-  const alreadySelected = selectedButton.classList.contains("selected-answer");
 
   // Remove "selected-answer" class from all answer buttons
   answerButtons.forEach((button) => button.classList.remove("selected-answer"));
 
-  // Add "selected-answer" class to the newly selected answer if it wasn't already selected
-  if (!alreadySelected) {
-    selectedButton.classList.add("selected-answer");
-  }
+  // Add "selected-answer" class to the newly selected answer
+  selectedButton.classList.add("selected-answer");
 
-  if (isCorrect) userQuizScore++;
-  // removed some redundant code here, there was a call to a button we removed
+  // questionId is the id of the current question
+  userAnswers[questionId] = {
+    userAnswer: selectedAnswerText,
+    isCorrect: isCorrect,
+  };
 };
 
 // Functions to navigate to the previous and next quiz questions.
@@ -219,9 +225,57 @@ const previousQuizQuestion = () => {
   displayQuizQuestion();
 };
 
+//had to move the score update to this function so it only updates when the user clicks next
 const nextQuizQuestion = () => {
-  currentQuizQuestionIndex++;
-  displayQuizQuestion();
+  const currentQuestion =
+    currentQuizCategory.questionArray[currentQuizQuestionIndex];
+  const answerData = userAnswers[currentQuestion.id];
+
+  if (answerData) {
+    // Update the score if the user's answer is correct
+    if (answerData.isCorrect && !answerData.scoreUpdated) {
+      userQuizScore++;
+      answerData.scoreUpdated = true; // Ensure score is updated only once per question
+    }
+
+    // feedback for the user if they got the answer right or wrong
+    const selectedButton =
+      answerData.selectedButton ||
+      quizQuestionContainer.querySelector(".selected-answer");
+    if (selectedButton) {
+      selectedButton.classList.add(
+        answerData.isCorrect ? "correct-answer" : "incorrect-answer"
+      );
+
+      // Highlight the correct answer if the selected one is wrong
+      if (!answerData.isCorrect) {
+        const correctAnswerButton = Array.from(
+          quizQuestionContainer.querySelectorAll(".answer-button")
+        ).find(
+          (button) =>
+            button.textContent ===
+            currentQuestion.answers.find((ans) => ans.isCorrect).answerText
+        );
+        correctAnswerButton.classList.add("correct-answer");
+      }
+    }
+
+    // Delay before moving to the next question
+    setTimeout(() => {
+      moveToNextQuestion();
+    }, 1500); // 2-second delay
+  } else {
+    moveToNextQuestion();
+  }
+};
+//probably gonna rework this, just needed to get it working for now
+const moveToNextQuestion = () => {
+  if (currentQuizQuestionIndex < currentQuizCategory.questionArray.length - 1) {
+    currentQuizQuestionIndex++;
+    displayQuizQuestion();
+  } else {
+    showQuizEndPage();
+  }
 };
 
 /* ---------------
@@ -230,6 +284,12 @@ const nextQuizQuestion = () => {
 
 const showQuizEndPage = () => {
   clearContainerChildren(quizQuestionContainer);
+  quizQuestionContainer.style.display = "flex";
+  quizQuestionContainer.style.flexDirection = "column";
+  quizQuestionContainer.style.alignItems = "center";
+  quizQuestionContainer.style.justifyContent = "center";
+  quizQuestionContainer.style.textAlign = "center";
+
   quizQuestionContainer.appendChild(
     createElementWithText("h2", "Quiz Completed!")
   );
@@ -248,38 +308,12 @@ const showQuizEndPage = () => {
   quizQuestionContainer.appendChild(
     createElementWithText("p", `Time taken: ${timeTaken} seconds`)
   );
-  const summaryButton = createSummaryButton(displaySummary);
-  quizQuestionContainer.appendChild(summaryButton);
 };
-
-// Function to finish the quiz and return to the category selection or home.
-const finishQuiz = (autoFinish) => {
-  // Clear the container
-  clearContainerChildren(quizQuestionContainer);
-
-  if (autoFinish) {
-    // Automatically finish the quiz after displaying the results
-    setTimeout(() => {
-      resetQuiz();
-    }, 10000); //
-  } else {
-    // Keep the results displayed until the user clicks home
-    quizCategoryContainer.style.display = "";
-    initializeQuizCategories();
-  }
-};
-
-// Calculate the time taken(ilakia)
-const quizEndTime = new Date();
-const timeTaken = (quizEndTime - quizStartTime) / 1000; // Convert milliseconds to seconds
-
-// Display the time taken
-quizQuestionContainer.appendChild(
-  createElementWithText("p", `Time taken: ${timeTaken} seconds`)
-);
 
 // Function to reset the quiz and return to the category selection.
 const resetQuiz = () => {
+  // ADDET USERANSWERS HER
+  userAnswers = {};
   currentQuizCategory = null;
   currentQuizQuestionIndex = 0;
   userQuizScore = 0;
