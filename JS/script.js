@@ -183,7 +183,11 @@ const nextQuizQuestion = () => { // function to navigate to the next question, t
 
         setTimeout(() => { // Delay before moving to the next question
             moveToNextQuestion();
+<<<<<<< Updated upstream
         }, 1000); //changed this to 1 second for now, can be changed later
+=======
+        }, 1000); // 2-second delay
+>>>>>>> Stashed changes
     } else {
         moveToNextQuestion();
     }
