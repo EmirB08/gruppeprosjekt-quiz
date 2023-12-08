@@ -44,7 +44,7 @@ document.body.appendChild(quizQuestionContainer);
 };
 const initializeQuizCategories = () => { // Function to initialize and display quiz categories.
 clearContainerChildren(quizCategoryContainer);
-quizCategoryContainer.appendChild(createElementWithText("h1", "Choose Your Quiz"));
+quizCategoryContainer.appendChild(createElementWithText("h1", "Frontend Development Quiz"));
 
 const buttonContainer = document.createElement("div");
 buttonContainer.classList.add("category-button-container");
