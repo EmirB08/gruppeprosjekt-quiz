@@ -24,7 +24,7 @@ const createQuizButton = (buttonText, eventHandler) => { // Function to create a
     return button;
 };
 
-const createElementWithText = (tagName, textContent, className) => { // Function to create a new element - added class
+const createElementWithText = (tagName, textContent, className) => { // Function to create a new element with text - added class
     const element = document.createElement(tagName);
     element.textContent = textContent;
     if (className) {
@@ -93,7 +93,7 @@ const shuffleArray = (array) => { // Function to shuffle an array to randomize t
     return array;
 };
 
-const displayQuizQuestion = () => { // Function to display the current quiz question - might do a refactor of this function later to use the questObject ids instead of the index
+const displayQuizQuestion = () => { // Function to display the current quiz question - big refactor happened here
     clearContainerChildren(quizQuestionContainer);
 
     const currentQuestion = currentQuizCategory.questionArray[currentQuizQuestionIndex];
@@ -192,7 +192,7 @@ const showQuizEndPage = () => { // shows the quiz end page
     const quizEndTime = new Date(); // Calculate the time taken(ilakia)
     const timeTaken = (quizEndTime - quizStartTime) / 1000;
     
-    const timeTakenRemove = Math.floor(timeTaken); // need to remove the decimals
+    const timeTakenRemove = Math.floor(timeTaken); // added this to remove the decimal places from the time taken, needed a quick fix
     quizQuestionContainer.appendChild(createElementWithText("p", `Time: ${timeTakenRemove} seconds`,"quiz-end-time")); // Display the time taken
     
     const restartButton = createQuizButton("Restart Quiz", () => { // restart button for the end page
@@ -203,7 +203,7 @@ const showQuizEndPage = () => { // shows the quiz end page
     quizQuestionContainer.appendChild(restartButton);
     };
 
-const resetQuiz = () => { // Function to reset the quiz and display the quiz categories, can be used for both the home and restart button on the end page
+const resetQuiz = () => { // Function to reset the quiz and display the quiz categories
     userAnswers = {}; //added this to reset the user answers object
     currentQuizCategory = null;
     currentQuizQuestionIndex = 0;
