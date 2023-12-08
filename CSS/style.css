@@ -85,14 +85,14 @@ body {
     color: rgb(23, 78, 166);
     font-size: 1.8rem;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 .question-text {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 500;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 } 
 .prev-button {
     padding: 10px;
@@ -113,7 +113,7 @@ body {
 
 .next-button, .finish-button {
     width: 40%;
-    heigh: 40px;
+    height: 45px;
     padding: 10px;
     margin: 10px;
     color: rgb(23, 78, 166);
@@ -175,7 +175,7 @@ body {
 }
 
 .quiz-end-score {
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 500;
     text-align: center;
     margin-bottom: 40px;
@@ -204,4 +204,35 @@ body {
 .restart-button:hover {
     transform: scale(1.05);
     background-color: rgb(23, 78, 166);
+}
+
+@keyframes blinkCorrect {
+    0%, 100% { background-color: #006400; }
+    50% { background-color: #228B22; }
+}
+
+.correct-blink {
+    animation: blinkCorrect 0.3s linear infinite;
+}
+
+.incorrect-answer {
+    background-color: #EA4335
+}
+
+@media screen and (max-width: 768px) {
+    .answer-button {
+        min-width: 95%;
+        font-size: 90%;
+        margin: 5px; /* Reduced from the original size */
+    }
+
+    .select-title, .quiz-title, .quiz-end-title, .question-text {
+        font-size: 90%; /* Reduced font size */
+    }
+
+    .category-button {
+        height: 60px;
+        width: 100px;
+    }
+
 }

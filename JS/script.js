@@ -124,7 +124,7 @@ const handleAnswerSelection = (selectedButton, questionId, selectedAnswerText, i
     selectedButton.classList.add("selected-answer");  // Add "selected-answer" class to the newly selected answer
 
     
-    userAnswers[questionId] = { // questionId is the id of the current question, using this now instead of the index in the future
+    userAnswers[questionId] = { // questionId is the id of the current question, could be used for test summary in the future
         userAnswer: selectedAnswerText,
         isCorrect: isCorrect
     };
@@ -147,9 +147,18 @@ const nextQuizQuestion = () => { // function to navigate to the next question, t
         }
 
         
-        const selectedButton = answerData.selectedButton || quizQuestionContainer.querySelector(".selected-answer"); // feedback for the user if they got the answer right or wrong
+        const selectedButton = answerData.selectedButton || quizQuestionContainer.querySelector(".selected-answer"); // function to handle feedback for the user's answer
         if (selectedButton) {
-        selectedButton.classList.add(answerData.isCorrect ? "correct-answer" : "incorrect-answer"); // Highlight the selected answer, green if correct, red if incorrect in css
+            selectedButton.classList.add(answerData.isCorrect ? "correct-answer" : "incorrect-answer");
+
+            
+            if (answerData.isCorrect) { // Apply blinking only for correct answers
+                selectedButton.classList.add("correct-blink");
+
+                setTimeout(() => {
+                    selectedButton.classList.remove("correct-blink");
+                }, 1500);
+            }
         }
 
         const nextButton = document.querySelector(".next-button");
@@ -159,7 +168,7 @@ const nextQuizQuestion = () => { // function to navigate to the next question, t
 
         setTimeout(() => { // Delay before moving to the next question
             moveToNextQuestion();
-        }, 1000); //changed this to 1 second for now, can be changed later
+        }, 1500); //changed this to 1 second for now, can be changed later
     } else {
         moveToNextQuestion();
     }
@@ -181,8 +190,10 @@ const showQuizEndPage = () => { // shows the quiz end page
     quizQuestionContainer.appendChild(createElementWithText("p", `Score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`, "quiz-end-score"));                                  
     
     const quizEndTime = new Date(); // Calculate the time taken(ilakia)
-    const timeTaken = (quizEndTime - quizStartTime) / 1000; // Convert milliseconds to seconds
-    quizQuestionContainer.appendChild(createElementWithText("p", `Time: ${timeTaken} seconds`,"quiz-end-time")); // Display the time taken
+    const timeTaken = (quizEndTime - quizStartTime) / 1000;
+    
+    const timeTakenRemove = Math.floor(timeTaken); // need to remove the decimals
+    quizQuestionContainer.appendChild(createElementWithText("p", `Time: ${timeTakenRemove} seconds`,"quiz-end-time")); // Display the time taken
     
     const restartButton = createQuizButton("Restart Quiz", () => { // restart button for the end page
         quizStartTime = new Date();
