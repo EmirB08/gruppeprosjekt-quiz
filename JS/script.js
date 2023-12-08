@@ -150,12 +150,6 @@ const nextQuizQuestion = () => { // function to navigate to the next question, t
         const selectedButton = answerData.selectedButton || quizQuestionContainer.querySelector(".selected-answer"); // feedback for the user if they got the answer right or wrong
         if (selectedButton) {
         selectedButton.classList.add(answerData.isCorrect ? "correct-answer" : "incorrect-answer"); // Highlight the selected answer, green if correct, red if incorrect in css
-
-            if (!answerData.isCorrect) { // Highlight the correct answer if the selected one is wrong
-                const correctAnswerButton = Array.from(quizQuestionContainer.querySelectorAll(".answer-button"))
-                    .find(button => button.textContent === currentQuestion.answers.find(ans => ans.isCorrect).answerText);
-                correctAnswerButton.classList.add("correct-answer");
-            }
         }
 
         const nextButton = document.querySelector(".next-button");
@@ -191,10 +185,11 @@ const showQuizEndPage = () => { // shows the quiz end page
     quizQuestionContainer.appendChild(createElementWithText("p", `Time: ${timeTaken} seconds`,"quiz-end-time")); // Display the time taken
     
     const restartButton = createQuizButton("Restart Quiz", () => { // restart button for the end page
+        quizStartTime = new Date();
         selectQuizCategory(currentQuizCategory.categoryName);
-      });
-      restartButton.classList.add("restart-button");
-      quizQuestionContainer.appendChild(restartButton);
+});
+    restartButton.classList.add("restart-button");
+    quizQuestionContainer.appendChild(restartButton);
     };
 
 const resetQuiz = () => { // Function to reset the quiz and display the quiz categories, can be used for both the home and restart button on the end page
