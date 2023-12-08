@@ -225,11 +225,11 @@ body {
     .answer-button {
         min-width: 95%;
         font-size: 90%;
-        margin: 5px; /* Reduced from the original size */
+        margin: 5px; /* hmm*/
     }
 
     .select-title, .quiz-title, .quiz-end-title, .question-text {
-        font-size: 90%; /* Reduced font size */
+        font-size: 92% 
     }
 
     .category-button {
