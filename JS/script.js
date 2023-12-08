@@ -16,7 +16,7 @@ const createContainer = (containerId) => { // Function to create a new container
     return container;
 };
 
-const createQuizButton = (buttonText, eventHandler) => { // Function to create a new button element with specified text and an event handler. - can be used to create additional elements
+const createQuizButton = (buttonText, eventHandler) => { // Function to create a new button element with specified text and an event handler.
     const button = document.createElement("button");
     button.textContent = buttonText;
     button.addEventListener("click", eventHandler);
@@ -103,19 +103,13 @@ const displayQuizQuestion = () => { // Function to display the current quiz ques
     const titleElement = createElementWithText("h2", titleAndProgressText);
     titleElement.classList.add("quiz-title");
     quizQuestionContainer.appendChild(titleElement);
-    quizQuestionContainer.appendChild(createElementWithText("h2", currentQuestion.questionText));
+    quizQuestionContainer.appendChild(createElementWithText("h2", currentQuestion.questionText, "question-text")); //added a class to make it easier to style the question text
 
     currentQuestion.answers.forEach(answer => {
         const answerButton = createQuizButton(answer.answerText, () => handleAnswerSelection(answerButton, currentQuestion.id, answer.answerText, answer.isCorrect));
         answerButton.classList.add("answer-button");
         quizQuestionContainer.appendChild(answerButton);
     });
-
-    if (currentQuizQuestionIndex > 0) {
-        const prevButton = createQuizButton("Previous", previousQuizQuestion);
-        prevButton.classList.add("nav-button", "prev-button");
-        quizQuestionContainer.appendChild(prevButton);
-    }
 
     const nextButton = createQuizButton("Next", nextQuizQuestion);
     nextButton.classList.add("nav-button", "next-button");
@@ -139,11 +133,6 @@ const handleAnswerSelection = (selectedButton, questionId, selectedAnswerText, i
     if (nextButton) {
         nextButton.disabled = false; // Enable the next button to make clicking possible
     }
-};
-
-const previousQuizQuestion = () => { // Functions to navigate to the previous questions - could be removed mostly using it for symmetry really..
-    currentQuizQuestionIndex--;
-    displayQuizQuestion();
 };
 
 const nextQuizQuestion = () => { // function to navigate to the next question, takes in the logic for the quiz end page and score which was moved from the previous function
