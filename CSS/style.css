@@ -50,6 +50,8 @@ body {
 }
 
 .home-button {
+    height: 55px;
+    width: 80px;
     padding: 10px;
     margin: 10px;
     background-color: #1A73E8;
@@ -64,7 +66,7 @@ body {
 }
 
 .home-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     background-color: rgb(23, 78, 166);
 }
 
