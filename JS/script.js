@@ -182,18 +182,20 @@ const moveToNextQuestion = () => { // Function to move to the next question or s
 
 const showQuizEndPage = () => { // shows the quiz end page
     clearContainerChildren(quizQuestionContainer); //css here for the quiz end page in case Andre finishes, easier for me to keep track of the styling
-    quizQuestionContainer.style.display = "flex";
-    quizQuestionContainer.style.flexDirection = "column";
-    quizQuestionContainer.style.alignItems = "center";
-    quizQuestionContainer.style.justifyContent = "center";
-    quizQuestionContainer.style.textAlign = "center";
-    quizQuestionContainer.appendChild(createElementWithText("h2", "Quiz Completed!"));
-    quizQuestionContainer.appendChild(createElementWithText("p", `Your score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`));                                  
+    
+    quizQuestionContainer.appendChild(createElementWithText("h2", "Quiz Completed!", "quiz-end-title"));
+    quizQuestionContainer.appendChild(createElementWithText("p", `Score: ${userQuizScore}/${currentQuizCategory.questionArray.length}`, "quiz-end-score"));                                  
     
     const quizEndTime = new Date(); // Calculate the time taken(ilakia)
     const timeTaken = (quizEndTime - quizStartTime) / 1000; // Convert milliseconds to seconds
-    quizQuestionContainer.appendChild(createElementWithText("p", `Time taken: ${timeTaken} seconds`));// Display the time taken
-};
+    quizQuestionContainer.appendChild(createElementWithText("p", `Time: ${timeTaken} seconds`,"quiz-end-time")); // Display the time taken
+    
+    const restartButton = createQuizButton("Restart Quiz", () => { // restart button for the end page
+        selectQuizCategory(currentQuizCategory.categoryName);
+      });
+      restartButton.classList.add("restart-button");
+      quizQuestionContainer.appendChild(restartButton);
+    };
 
 const resetQuiz = () => { // Function to reset the quiz and display the quiz categories, can be used for both the home and restart button on the end page
     userAnswers = {}; //added this to reset the user answers object
